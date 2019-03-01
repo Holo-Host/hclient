@@ -6,7 +6,7 @@
  *       display nice Holo logo and something like "Connecting to Holo network..."
  */
 
-(function(){
+const hLoader = (function(){
     // Networking settings etc
     const settings = {
         resolverUrl: '//resolver.holohost.net', // Address of url resolver service worker
@@ -42,11 +42,15 @@
         // TODO: Check if protocol is https?
         _url = window.location.hostname;
 
+        // Extend scope of ip
         let addr;
+        // tmp
+        //_url = "test2.imagexchange.pl";
         queryForHosts(_url)
             .then(obj => processWorkerResponse(obj))
             .then(r => {
-                addr = r;
+                // Add protocol to hostname
+                addr = '//' + r;
                 return fetchHappContent(r);
             })
             .then(html => replaceHtml(html, addr))
@@ -67,7 +71,7 @@
      */
     const queryForHosts = (url = "", dna = "") => {
         console.log('getting hosts for', url);
-        // Call worker to resolve url to array of addresses of HoloPort
+        // Call worker to resolve url to array of addresses of HoloPorts
         return fetch(settings.resolverUrl, {
                 method: "POST",
                 cache: "no-cache",
@@ -78,7 +82,6 @@
                 body: 'url=' + encodeURIComponent(url) + '&dna=' + encodeURIComponent(dna)
             })
             .then(r => {
-                console.log("response", r)
                 return r.json();
               }
             );
@@ -169,41 +172,31 @@
      * @return null
      */
     const replaceHtml = (html, addr) => {
-        html = replaceBase(html, "http://"+addr);
+        html = addBaseRaw(html, addr);
         document.open();
         document.write(html);
         document.close();
     }
 
     /**
-     * Add <base> tag that defines host for relative urls on page.
-     * This is required so the bootstrapped HTML is able to load its other static assets
-     * 
+     * Add <base> tag that defines host for relative urls on page
      * @param {string} html Html to add tag to
      * @param {string} url hostname (with protocol and port, e.g. //test.holo.host:4141")
      * @return {string} Html with <base> tag inserted
      */
-    const replaceBase = (html, url) => {
-        const parser = new DOMParser();
-        let doc = parser.parseFromString(html, "text/html");
-        let base = doc.createElement("base");
-        base.href = `${url}`;
-        doc.head.appendChild(base);
-        return doc.documentElement.outerHTML;
+    const addBaseRaw = (html, url) => {
+        // TODO: make this more robust with a real HTML parser.
+        // For instance, this fails on something weird like:
+        // <head data-lol=">">
+        return html.replace(/<head(.*?)>/, `<head$1><base href="${url}"/>`)
     }
-
 
     // Public API
-    hLoader = {
-        initHapp,
-        getHappUrl,
-        getHappDna,
-        replaceBase,
+    return {
+        initHapp: initHapp,
+        getHappUrl: getHappUrl,
+        getHappDna: getHappDna
     }
-
-    // required for browser testing
-    if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
-        module.exports = hLoader;
-    else
-        window.hLoader = hLoader;
 })();
+
+console.log("hQuery loaded");

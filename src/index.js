@@ -20,7 +20,7 @@ const hClient = (function () {
     generateNewReadwriteKeypair
   } = require('./keyManagement')
 
-  const getDefaultWebsocketUrl = () => 'ws://' + location.hostname + ':' + 4001
+  const getDefaultWebsocketUrl = () => 'ws://' + location.hostname + ':' + 4000
 
   let keypair
   let websocket
