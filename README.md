@@ -21,6 +21,7 @@ const holochainClient = require("@holochain/hc-web-client");
 holoClient = hClient.makeWebClient(window.holochainclient);
 ```
 
+
 This will return an API compatible holoClient object to make calls with but will included all the relevent hooks to be holo enabled.
 
 ---
