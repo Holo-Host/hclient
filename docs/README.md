@@ -40,7 +40,6 @@ git submodule update
 # apply the patch for memlimit for now
 cd ./dpki-lite.js
 git apply ../dpki-lite.patch
-npm install && npm run bootstrap
 
 cd ..
 npm install
