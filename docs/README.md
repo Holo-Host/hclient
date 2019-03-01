@@ -62,7 +62,7 @@ The integration of hLoader and hLoader are tested with the resolver.holo.host an
 ```
 cd integration_tests
 npm install
-npm run start &
-... wait for servers to build and start
-npm run cypress:run
+npm run test
 ```
+
+or instead of `npm run test` you can use `npm run test:runner` to use the interactive cypress test browser.
