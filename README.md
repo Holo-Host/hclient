@@ -53,7 +53,7 @@ npm install
 
 Unit tests exist for hClient and can be run using:
 ```
-npm run test
+npm run unit_test
 ```
 
 These do not run in a browser environment
@@ -63,9 +63,26 @@ These do not run in a browser environment
 The integration of hLoader and hLoader are tested with the resolver.holo.host and saltmine.holo.host set up as mocks. For true integration tests these mocks can be removed in the future. Run the ui-automation tests by running
 
 ```
-cd integration_tests
-npm install
-npm run test
+npm run prepare:integration_tests
+npm run integration_test
 ```
 
-or instead of `npm run test` you can use `npm run test:runner` to use the interactive cypress test browser.
+or instead of `npm run integration_test` you can use the following to run the integration tests in the interactive cypress test runner
+```
+npm run prepare:integration_tests
+cd ./integration_tests
+npm run test:runner
+```
+
+## Deployment
+
+Coming soon...
+
+## Contributors
+
+* **Willem Olding** - [github](https://github.com/willemolding)
+* **Paul Hartzog** - [github](https://github.com/paulbhartzog-holo)
+
+## License
+
+This project is licensed under the GPL-3 License - see the [LICENSE](LICENSE) file for details

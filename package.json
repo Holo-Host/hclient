@@ -9,7 +9,8 @@
     "lint:fix": "eslint ./src/ --fix",
     "prepare:integration_tests": "cd ./integration_tests && npm install",
     "integration_test": "cd ./integration_tests && npm run test",
-    "test": "npm run lint && mocha ./test/*.js -r chai/register-should && npm run prepare:integration_tests && npm run integration_test"
+    "unit_test": "mocha ./test/*.js -r chai/register-should",
+    "test": "npm run lint && npm run unit_test && npm run prepare:integration_tests && npm run integration_test"
   },
   "author": "",
   "license": "GPL-3",
