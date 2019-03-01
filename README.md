@@ -1,5 +1,8 @@
 # hClient
-is the client side library developers must import for their web UI to be Holo enabled. It includes the following functionality:
+
+For API documentation for the master branch visit [https://holo-host.github.io/hClient.js/]
+
+hClient is the client side library developers must import for their web UI to be Holo enabled. It includes the following functionality:
     - Key management and generation
         + Generating temporary readonly keys for browsing
         + Detecting when authorization is required and prompting the user to signup/login to generate read/write keys
@@ -40,7 +43,6 @@ git submodule update
 # apply the patch for memlimit for now
 cd ./dpki-lite.js
 git apply ../dpki-lite.patch
-npm install && npm run bootstrap
 
 cd ..
 npm install
