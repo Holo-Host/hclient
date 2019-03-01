@@ -1,6 +1,6 @@
 # hClient
 
-For API documentation visit [https://holo-host.github.io/hClient.js/]
+For API documentation for the master branch visit [https://holo-host.github.io/hClient.js/]
 
 hClient is the client side library developers must import for their web UI to be Holo enabled. It includes the following functionality:
     - Key management and generation
