@@ -8,4 +8,5 @@ before_install:
   - git submodule update
   - cd ./dpki-lite.js
   - git apply ../dpki-lite.patch
-  - npm install && npm run bootstrap
+  - cd ./packages/dpki-lite
+  - npm install
