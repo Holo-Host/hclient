@@ -4,7 +4,7 @@
   "description": "Client side lib injected by holo loader",
   "scripts": {
     "build": "parcel build ./src/index.js --global hClient -o ./dist/hClient.js",
-    "doc": "jsdoc ./src/index.js -d ../../docs/jsdoc/",
+    "doc": "jsdoc ./src/index.js -d ./docs",
     "lint": "eslint ./src/",
     "lint:fix": "eslint ./src/ --fix",
     "prepare:integration_tests": "cd ./integration_tests && npm install",
