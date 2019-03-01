@@ -7,7 +7,9 @@
     "doc": "jsdoc ./src/index.js -d ../../docs/jsdoc/",
     "lint": "eslint ./src/",
     "lint:fix": "eslint ./src/ --fix",
-    "test": "mocha ./test/*.js -r chai/register-should"
+    "prepare:integration_tests": "cd ./integration_tests && npm install",
+    "integration_test": "cd ./integration_tests && npm run test",
+    "test": "npm run lint && mocha ./test/*.js -r chai/register-should && npm run prepare:integration_tests && npm run integration_test"
   },
   "author": "",
   "license": "GPL-3",
@@ -31,6 +33,7 @@
   },
   "dependencies": {
     "@holochain/hcid-js": "0.0.3-alpha",
+    "@holochain/dpki-lite": "file:./dpki-lite.js/packages/dpki-lite",
     "babel-polyfill": "^6.26.0",
     "dialog-polyfill": "^0.4.10",
     "jquery": "^3.3.1"

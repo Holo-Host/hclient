@@ -5,7 +5,7 @@
  *
  */
 
-const { Keypair, randomBytes, pwHash } = require('../dpki-lite.js/packages/dpki-lite/lib')
+const { Keypair, randomBytes, pwHash } = require('@holochain/dpki-lite')
 const Base64Binary = require('./base64-binary')
 
 const saltmineUrl = '//saltmine.holohost.net'
