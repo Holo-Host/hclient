@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@holochain/hcid-js": "0.0.3-alpha",
+    "@holochain/dpki-lite": "file:./dpki-lite.js/packages/dpki-lite",
     "babel-polyfill": "^6.26.0",
     "dialog-polyfill": "^0.4.10",
     "jquery": "^3.3.1"
