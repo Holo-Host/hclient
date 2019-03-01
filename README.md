@@ -1,5 +1,7 @@
 # hClient
 
+[![Build Status](https://travis-ci.org/Holo-Host/hClient.js.png)](https://travis-ci.org/Holo-Host/hClient.js)
+
 For API documentation for the master branch visit https://holo-host.github.io/hClient.js/module-hClient.html
 
 hClient is the client side library developers must import for their web UI to be Holo enabled. It includes the following functionality:
