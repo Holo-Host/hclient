@@ -4,7 +4,7 @@
   "description": "Client side lib injected by holo loader",
   "scripts": {
     "build": "parcel build ./src/index.js --global hClient -o ./dist/hClient.js",
-    "doc": "jsdoc ./src/index.js -d ./docs",
+    "doc": "jsdoc -c jsdoc.json",
     "lint": "eslint ./src/",
     "lint:fix": "eslint ./src/ --fix",
     "prepare:integration_tests": "cd ./integration_tests && npm install",
@@ -33,10 +33,11 @@
     "stylus": "^0.54.5"
   },
   "dependencies": {
-    "@holochain/hcid-js": "0.0.3-alpha",
     "@holochain/dpki-lite": "file:./dpki-lite.js/packages/dpki-lite",
+    "@holochain/hcid-js": "0.0.3-alpha",
     "babel-polyfill": "^6.26.0",
     "dialog-polyfill": "^0.4.10",
+    "docdash": "^1.0.3",
     "jquery": "^3.3.1"
   }
 }

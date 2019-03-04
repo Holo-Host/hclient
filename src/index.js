@@ -1,13 +1,14 @@
 require('babel-polyfill')
 /**
- * hClient
  * The javascript library for making your web UI Holo enabled!
  *
- * It handles: Key management and generation, Generating temporary readonly keys for browsing,
- * Detecting when authorization is required and prompting the user to signup/login to generate read/write keys,
- * Signing calls and responses,
- * Setting up a websocket connection to the interceptor to sign commits on request,
- * Wrapping and unwrapping calls to and from the interceptor such that they look like regular holochain calls
+ * It handles:
+ * - Key management and generation
+ *   - Generating temporary readonly keys for browsing
+ *   - Detecting when authorization is required and prompting the user to signup/login to generate read/write keys
+ * - Signing calls and responses
+ * - Setting up a websocket connection to the interceptor to sign commits on request
+ * - Wrapping and unwrapping calls to and from the interceptor such that they look like regular holochain calls
  *
  * @module hClient
  */
@@ -63,14 +64,20 @@ const hClient = (function () {
   /**
      * Wraps and returns a holochainClient module.
      * Keeps the same functionaltiy but adds preCall and postCall hooks and also forces
-     * connect to go to a given URL
+     * connect to go to a given URL. This is the essential requirement to holo-fy any holochain web UI.
      * @memberof module:hClient
      *
      * @param      {Object}    holochainClient A hc-web-client module to wrap
-     * @param      {string}    [url]       The url to connect to (defaults to the same location serving the UI but with the websocket protocol)
-     * @param      {Function}  [preCall]   The pre call funciton. Takes the callString and params and returns new callString and params
-     * @param      {Function}  [postCall]  The post call function. Takes the response and returns the new response
-     * @param      {Function}  [postConnect]  The post connect function. Takes a RPC-websockets object and returns it preCall=preCall, postCall=postCall, postConnect=postConnect
+     * @param      {string}    [url]       The url to direct websocket calls. Defaults to the same location serving the UI but with the websocket protocol.
+     * @param      {Function}  [preCall]   The pre call funciton. Takes the callString and params and returns new callString and params.
+     * Leave as default unless you know what you are doing.
+     *
+     * @param      {Function}  [postCall]  The post call function. Takes the response and returns the new response.
+     * Leave as default unless you know what you are doing.
+     *
+     * @param      {Function}  [postConnect]  The post connect function.
+     * Takes a RPC-websockets object and returns it preCall=preCall, postCall=postCall, postConnect=postConnect.
+     * Leave as default unless you know what you are doing.
      */
   const makeWebClient = (holochainClient, url, preCall, postCall, postConnect) => {
     url = url || getDefaultWebsocketUrl()
