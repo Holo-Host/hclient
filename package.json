@@ -35,10 +35,10 @@
     "stylus": "^0.54.5"
   },
   "dependencies": {
-    "@holochain/dpki-lite": "file:./dpki-lite.js/packages/dpki-lite",
-    "@holochain/hcid-js": "0.0.3-alpha",
     "babel-polyfill": "^6.26.0",
     "dialog-polyfill": "^0.4.10",
-    "jquery": "^3.3.1"
+    "jquery": "^3.3.1",
+    "libsodium-wrappers-sumo": "^0.7.4",
+    "msgpack-lite": "^0.1.26"
   }
 }

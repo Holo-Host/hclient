@@ -51,7 +51,9 @@ describe("hClient: basic test", () => {
   })
 })
 
-describe("keyManagement", () => {
+describe("keyManagement", function () {
+
+  this.timeout(5000);
 
   it("Can get 32 bytes of local entropy from webcrypto or sodium as a fallback", async () => {
     let entropy = await keyManagement.getLocalEntropy();
