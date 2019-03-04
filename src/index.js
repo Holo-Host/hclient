@@ -1,41 +1,100 @@
 require('babel-polyfill')
 /**
- * hClient
  * The javascript library for making your web UI Holo enabled!
  *
+ * It handles:
  * - Key management and generation
-    + Generating temporary readonly keys for browsing
-    + Detecting when authorization is required and prompting the user to signup/login to generate read/write keys
+ *   - Generating temporary readonly keys for browsing
+ *   - Detecting when authorization is required and prompting the user to signup/login to generate read/write keys
  * - Signing calls and responses
- * - setting up a websocket connection to the interceptor to sign commits on request
- * -  Wrapping and unwrapping calls to and from the interceptor such that they look like regular holochain calls
+ * - Setting up a websocket connection to the interceptor to sign commits on request
+ * - Wrapping and unwrapping calls to and from the interceptor such that they look like regular holochain calls
+ *
+ * Using this library to make a Holochain web UI Holo compatible is very easy provide you are already using hc-web-client
+ * to connect to holochain. In this case an app can be converted by adding the following lines to a page load function
+ * ```javascript
+ * let holochainclient = require('@holochain/hc-web-client') // this should already be part of your web UI
+ * const hClient = require('hClient')
+ *
+ * holochainclient = hClient.makeWebClient(holochainclient) // overwrite the holochain client with the holo version
+ * hClient.installLoginDialog() // add the optional login dialog (strongly reccomended)
+ * ```
+ *
+ * The login dialog is required because for Holo the user must manage their own keys in the browser. This is unlike Holochain where they
+ * are managed by the conductor. If the login dialog is installed hClient will automatically detect when a user is trying to take an action that
+ * requires a keypair (such as making a commit) and modally display the login page. Completing the login will generate/regenerate the users keypair
+ * that is stored in the browser.
+ *
+ * ![holo-login-dialog](./sign-in-to-holo-screen.png?raw=true "Login Dialog")
  *
  * @module hClient
  */
 
 const hClient = (function () {
-  const { insertLoginHtml, registerLoginCallbacks, showLoginDialog } = require('./login')
+  let keypair
+  let websocket
+
   const {
     generateReadonlyKeypair,
     generateNewReadwriteKeypair
+    // regenerateReadwriteKeypair
   } = require('./keyManagement')
 
-  const getDefaultWebsocketUrl = () => document.getElementsByTagName('base')[0].href.replace('http', 'ws')
+  const { showLoginDialog } = require('./login')
 
-  let keypair
-  let websocket
+  /* ============================================
+  =            Public API Functions            =
+  ============================================ */
+  // re-exports
+  const {
+    insertLoginHtml,
+    registerLoginCallbacks
+  } = require('./login')
+
+  /**
+   * Insert the HTML for the login dialog into the current document and register the callbacks
+   * @method
+   * @memberof module:hClient
+   *
+   * @return     {(Function|Object)}  { description_of_the_return_value }
+   */
+  const installLoginDialog = () => {
+    insertLoginHtml()
+    registerLoginCallbacks()
+  }
+
+  /**
+   * Displays the login dialog and generates a new read/write key with the email/password
+   * This will overwrite the current key
+   * @memberof module:hClient
+   */
+  const triggerLoginPrompt = () => {
+    showLoginDialog((email, password) => {
+      generateNewReadwriteKeypair(email, password).then(kp => {
+        console.log('Registered keypair is ', kp)
+        setKeypair(kp)
+        requestHosting()
+      })
+    })
+  }
 
   /**
      * Wraps and returns a holochainClient module.
      * Keeps the same functionaltiy but adds preCall and postCall hooks and also forces
-     * connect to go to a given URL
+     * connect to go to a given URL. This is the essential requirement to holo-fy any holochain web UI.
      * @memberof module:hClient
      *
      * @param      {Object}    holochainClient A hc-web-client module to wrap
-     * @param      {string}    [url]       The url to connect to
-     * @param      {Function}  [preCall]   The pre call funciton. Takes the callString and params and returns new callString and params
-     * @param      {Function}  [postCall]  The post call function. Takes the response and returns the new response
-     * @param      {Function}  [postConnect]  The post connect function. Takes a RPC-websockets object and returns it preCall=preCall, postCall=postCall, postConnect=postConnect
+     * @param      {string}    [url]       The url to direct websocket calls. Defaults to the same location serving the UI but with the websocket protocol.
+     * @param      {Function}  [preCall]   The pre call funciton. Takes the callString and params and returns new callString and params.
+     * Leave as default unless you know what you are doing.
+     *
+     * @param      {Function}  [postCall]  The post call function. Takes the response and returns the new response.
+     * Leave as default unless you know what you are doing.
+     *
+     * @param      {Function}  [postConnect]  The post connect function.
+     * Takes a RPC-websockets object and returns it preCall=preCall, postCall=postCall, postConnect=postConnect.
+     * Leave as default unless you know what you are doing.
      */
   const makeWebClient = (holochainClient, url, preCall, postCall, postConnect) => {
     url = url || getDefaultWebsocketUrl()
@@ -74,6 +133,28 @@ const hClient = (function () {
   }
 
   /**
+   * Request that the Holo host currently serving the page sets up a local chain for the current keypair
+   * @memberof module:hClient
+   *
+   */
+  const requestHosting = async () => {
+    if (websocket) {
+      websocket.call('holo/get-hosted', { agentId: getCurrentAgentId() })
+    } else {
+      throw Error('Cannot request registration with no websocket')
+    }
+  }
+
+  /* =====  End of Public API Functions  ====== */
+
+  /**
+   * Gets the default websocket url.
+   *
+   * @return     {Object}  The default websocket url.
+   */
+  const getDefaultWebsocketUrl = () => document.getElementsByTagName('base')[0].href.replace('http', 'ws')
+
+  /**
    * Setter for the keypair
    * Attaches a new event listener on the websocket for the new agentID
    *
@@ -99,18 +180,6 @@ const hClient = (function () {
       }
     } else {
       throw Error('Could not register callback as no valid websocket instance found')
-    }
-  }
-
-  /**
-   * Communicate with the conductor and request they create a chain for you on the host
-   *
-   */
-  const requestHosting = async () => {
-    if (websocket) {
-      websocket.call('holo/get-hosted', { agentId: getCurrentAgentId() })
-    } else {
-      throw Error('Cannot request registration with no websocket')
     }
   }
 
@@ -158,13 +227,7 @@ const hClient = (function () {
 
     // Check response for authentication error to see if login is required
     if (response.Err && response.Err.code === 401) {
-      showLoginDialog((email, password) => {
-        generateNewReadwriteKeypair(email, password).then(kp => {
-          console.log('Registered keypair is ', kp)
-          setKeypair(kp)
-          requestHosting()
-        })
-      })
+      triggerLoginPrompt()
     }
 
     // TODO: Sign the response and sent it back to the interceptor (check this is still required)
@@ -190,12 +253,11 @@ const hClient = (function () {
   }
 
   return {
+    installLoginDialog,
+    triggerLoginPrompt,
     makeWebClient,
-    generateNewReadwriteKeypair,
-    insertLoginHtml,
-    registerLoginCallbacks,
-    showLoginDialog,
-    getCurrentAgentId
+    getCurrentAgentId,
+    requestHosting
   }
 })()
 

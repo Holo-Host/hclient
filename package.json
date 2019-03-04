@@ -2,14 +2,16 @@
   "name": "hclient",
   "version": "0.0.1",
   "description": "Client side lib injected by holo loader",
+  "main": "./src/index.js",
   "scripts": {
     "build": "parcel build ./src/index.js --global hClient -o ./dist/hClient.js",
-    "doc": "jsdoc ./src/index.js -d ./docs",
+    "doc": "jsdoc -c jsdoc.json",
     "lint": "eslint ./src/",
     "lint:fix": "eslint ./src/ --fix",
     "prepare:integration_tests": "cd ./integration_tests && npm install",
     "integration_test": "cd ./integration_tests && npm run test",
-    "test": "npm run lint && mocha ./test/*.js -r chai/register-should && npm run prepare:integration_tests && npm run integration_test"
+    "unit_test": "mocha ./test/*.js -r chai/register-should",
+    "test": "npm run lint && npm run unit_test && npm run prepare:integration_tests && npm run integration_test"
   },
   "author": "",
   "license": "GPL-3",
@@ -19,6 +21,7 @@
     "babel-runtime": "^6.26.0",
     "chai": "^4.2.0",
     "cssnano": "^4.1.10",
+    "docdash": "^1.0.3",
     "eslint": "^5.14.1",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.16.0",
@@ -32,8 +35,8 @@
     "stylus": "^0.54.5"
   },
   "dependencies": {
-    "@holochain/hcid-js": "0.0.3-alpha",
     "@holochain/dpki-lite": "file:./dpki-lite.js/packages/dpki-lite",
+    "@holochain/hcid-js": "0.0.3-alpha",
     "babel-polyfill": "^6.26.0",
     "dialog-polyfill": "^0.4.10",
     "jquery": "^3.3.1"

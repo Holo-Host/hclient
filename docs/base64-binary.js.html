@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>base64-binary.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-hClient.html">hClient</a><ul class='methods'><li data-type='method'><a href="module-hClient.html#.getCurrentAgentId">getCurrentAgentId</a></li><li data-type='method'><a href="module-hClient.html#.installLoginDialog">installLoginDialog</a></li><li data-type='method'><a href="module-hClient.html#.makeWebClient">makeWebClient</a></li><li data-type='method'><a href="module-hClient.html#.requestHosting">requestHosting</a></li><li data-type='method'><a href="module-hClient.html#.triggerLoginPrompt">triggerLoginPrompt</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#Base64Binary">Base64Binary</a></li><li><a href="global.html#callSaltmine">callSaltmine</a></li><li><a href="global.html#generateNewReadwriteKeypair">generateNewReadwriteKeypair</a></li><li><a href="global.html#generateReadonlyKeypair">generateReadonlyKeypair</a></li><li><a href="global.html#getLocalEntropy">getLocalEntropy</a></li><li><a href="global.html#getRegisteredSalt">getRegisteredSalt</a></li><li><a href="global.html#getRemoteEntropy">getRemoteEntropy</a></li><li><a href="global.html#insertLoginHtml">insertLoginHtml</a></li><li><a href="global.html#regenerateReadwriteKeypair">regenerateReadwriteKeypair</a></li><li><a href="global.html#registerLoginCallbacks">registerLoginCallbacks</a></li><li><a href="global.html#registerSalt">registerSalt</a></li><li><a href="global.html#showLoginDialog">showLoginDialog</a></li><li><a href="global.html#storeHosts">storeHosts</a></li><li><a href="global.html#XorUint8Array">XorUint8Array</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">base64-binary.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+Copyright (c) 2011, Daniel Guerrero
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL DANIEL GUERRERO BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/**
+ * Uses the new array typed in javascript to binary base64 encode/decode
+ * at the moment just decodes a binary base64 encoded
+ * into either an ArrayBuffer (decodeArrayBuffer)
+ * or into an Uint8Array (decode)
+ *
+ * References:
+ * https://developer.mozilla.org/en/JavaScript_typed_arrays/ArrayBuffer
+ * https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array
+ */
+
+const Base64Binary = (function () {
+  const _keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
+
+  /* will return a  Uint8Array type */
+  const decodeArrayBuffer = function (input) {
+    var bytes = (input.length / 4) * 3
+    var ab = new ArrayBuffer(bytes)
+    decode(input, ab)
+
+    return ab
+  }
+
+  const removePaddingChars = function (input) {
+    var lkey = _keyStr.indexOf(input.charAt(input.length - 1))
+    if (lkey === 64) {
+      return input.substring(0, input.length - 1)
+    }
+    return input
+  }
+
+  const decode = function (input, arrayBuffer) {
+    // get last chars to see if are valid
+    input = removePaddingChars(input)
+    input = removePaddingChars(input)
+
+    var bytes = parseInt((input.length / 4) * 3, 10)
+
+    var uarray
+    var chr1, chr2, chr3
+    var enc1, enc2, enc3, enc4
+    var i = 0
+    var j = 0
+
+    if (arrayBuffer) { uarray = new Uint8Array(arrayBuffer) } else { uarray = new Uint8Array(bytes) }
+
+    input = input.replace(/[^A-Za-z0-9\+\/\=]/g, '')
+
+    for (i = 0; i &lt; bytes; i += 3) {
+      // get the 3 octects in 4 ascii chars
+      enc1 = _keyStr.indexOf(input.charAt(j++))
+      enc2 = _keyStr.indexOf(input.charAt(j++))
+      enc3 = _keyStr.indexOf(input.charAt(j++))
+      enc4 = _keyStr.indexOf(input.charAt(j++))
+
+      chr1 = (enc1 &lt;&lt; 2) | (enc2 >> 4)
+      chr2 = ((enc2 &amp; 15) &lt;&lt; 4) | (enc3 >> 2)
+      chr3 = ((enc3 &amp; 3) &lt;&lt; 6) | enc4
+
+      uarray[i] = chr1
+      if (enc3 !== 64) uarray[i + 1] = chr2
+      if (enc4 !== 64) uarray[i + 2] = chr3
+    }
+
+    return uarray
+  }
+
+  return {
+    decode,
+    decodeArrayBuffer
+  }
+})()
+
+module.exports = Base64Binary
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Mar 04 2019 11:03:59 GMT+1100 (AEDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+
+
+</body>
+</html>
