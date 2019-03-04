@@ -25,7 +25,7 @@ wss.register('holo/identify', ({agentId}) => {
 	return {Ok: true}
 })
 
-wss.register('holo/get-hosted', ({agentId}) => {
+wss.register('holo/agents/new', ({agentId}) => {
 	return {Ok: "you are now hosted!... really"}
 })
 
