@@ -2,6 +2,7 @@
   "name": "hclient",
   "version": "0.0.1",
   "description": "Client side lib injected by holo loader",
+  "main": "./src/index.js",
   "scripts": {
     "build": "parcel build ./src/index.js --global hClient -o ./dist/hClient.js",
     "doc": "jsdoc -c jsdoc.json",
