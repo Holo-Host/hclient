@@ -20,6 +20,7 @@
     "babel-runtime": "^6.26.0",
     "chai": "^4.2.0",
     "cssnano": "^4.1.10",
+    "docdash": "^1.0.3",
     "eslint": "^5.14.1",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.16.0",
@@ -37,7 +38,6 @@
     "@holochain/hcid-js": "0.0.3-alpha",
     "babel-polyfill": "^6.26.0",
     "dialog-polyfill": "^0.4.10",
-    "docdash": "^1.0.3",
     "jquery": "^3.3.1"
   }
 }
