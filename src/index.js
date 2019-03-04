@@ -10,6 +10,23 @@ require('babel-polyfill')
  * - Setting up a websocket connection to the interceptor to sign commits on request
  * - Wrapping and unwrapping calls to and from the interceptor such that they look like regular holochain calls
  *
+ * Using this library to make a Holochain web UI Holo compatible is very easy provide you are already using hc-web-client
+ * to connect to holochain. In this case an app can be converted by adding the following lines to a page load function
+ * ```javascript
+ * let holochainclient = require('@holochain/hc-web-client') // this should already be part of your web UI
+ * const hClient = require('hClient')
+ *
+ * holochainclient = hClient.makeWebClient(holochainclient) // overwrite the holochain client with the holo version
+ * hClient.installLoginDialog() // add the optional login dialog (strongly reccomended)
+ * ```
+ *
+ * The login dialog is required because for Holo the user must manage their own keys in the browser. This is unlike Holochain where they
+ * are managed by the conductor. If the login dialog is installed hClient will automatically detect when a user is trying to take an action that
+ * requires a keypair (such as making a commit) and modally display the login page. Completing the login will generate/regenerate the users keypair
+ * that is stored in the browser.
+ *
+ * ![holo-login-dialog](./sign-in-to-holo-screen.png?raw=true "Login Dialog")
+ *
  * @module hClient
  */
 
