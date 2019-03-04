@@ -17,8 +17,7 @@
   <script type="text/javascript">
 
    window.holochainclient = window.hClient.makeWebClient(window.holochainclient)
-   window.hClient.insertLoginHtml();
-   window.hClient.registerLoginCallbacks();
+   window.hClient.installLoginDialog();
 
    window.holochainclient.connect().then(({call}) => {
 
