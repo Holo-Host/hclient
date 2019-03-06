@@ -1,3 +1,7 @@
+/**
+ @module dpki-ultralite
+*/
+
 exports.Keypair = require('./keypair').Keypair
 
 const util = require('./util')

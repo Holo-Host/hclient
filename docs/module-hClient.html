@@ -26,7 +26,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-hClient.html">hClient</a><ul class='methods'><li data-type='method'><a href="module-hClient.html#.getCurrentAgentId">getCurrentAgentId</a></li><li data-type='method'><a href="module-hClient.html#.installLoginDialog">installLoginDialog</a></li><li data-type='method'><a href="module-hClient.html#.makeWebClient">makeWebClient</a></li><li data-type='method'><a href="module-hClient.html#.requestHosting">requestHosting</a></li><li data-type='method'><a href="module-hClient.html#.triggerLoginPrompt">triggerLoginPrompt</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-hClient.html">hClient</a><ul class='methods'><li data-type='method'><a href="module-hClient.html#.getCurrentAgentId">getCurrentAgentId</a></li><li data-type='method'><a href="module-hClient.html#.getDnaForUrl">getDnaForUrl</a></li><li data-type='method'><a href="module-hClient.html#.getHostsForUrl">getHostsForUrl</a></li><li data-type='method'><a href="module-hClient.html#.installLoginDialog">installLoginDialog</a></li><li data-type='method'><a href="module-hClient.html#.makeWebClient">makeWebClient</a></li><li data-type='method'><a href="module-hClient.html#.requestHosting">requestHosting</a></li><li data-type='method'><a href="module-hClient.html#.triggerLoginPrompt">triggerLoginPrompt</a></li></ul></li><li><a href="module-login.html">login</a><ul class='methods'><li data-type='method'><a href="module-login.html#~insertLoginHtml">insertLoginHtml</a></li><li data-type='method'><a href="module-login.html#~registerLoginCallbacks">registerLoginCallbacks</a></li><li data-type='method'><a href="module-login.html#~showLoginDialog">showLoginDialog</a></li></ul></li><li><a href="module-persistence.html">persistence</a></li></ul><h3>Global</h3><ul><li><a href="global.html#callSaltmine">callSaltmine</a></li><li><a href="global.html#generateNewReadwriteKeypair">generateNewReadwriteKeypair</a></li><li><a href="global.html#generateReadonlyKeypair">generateReadonlyKeypair</a></li><li><a href="global.html#getLocalEntropy">getLocalEntropy</a></li><li><a href="global.html#getRegisteredSalt">getRegisteredSalt</a></li><li><a href="global.html#getRemoteEntropy">getRemoteEntropy</a></li><li><a href="global.html#regenerateReadwriteKeypair">regenerateReadwriteKeypair</a></li><li><a href="global.html#registerSalt">registerSalt</a></li><li><a href="global.html#resolverUrl">resolverUrl</a></li><li><a href="global.html#XorUint8Array">XorUint8Array</a></li></ul>
 </nav>
 
 <div id="main">
@@ -195,7 +195,7 @@ that is stored in the browser.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line127">line 127</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line131">line 131</a>
     </li></ul></dd>
     
 
@@ -295,6 +295,182 @@ that is stored in the browser.</p>
 
     
 
+    <h4 class="name" id=".getDnaForUrl"><span class="type-signature">(static) </span>getDnaForUrl<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="resolver.js.html">resolver.js</a>, <a href="resolver.js.html#line43">line 43</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Displays the login dialog and generates a new read/write key with the email/password
+This will overwrite the current key</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getHostsForUrl"><span class="type-signature">(static) </span>getHostsForUrl<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="resolver.js.html">resolver.js</a>, <a href="resolver.js.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Displays the login dialog and generates a new read/write key with the email/password
+This will overwrite the current key</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id=".installLoginDialog"><span class="type-signature">(static) </span>installLoginDialog<span class="signature">()</span><span class="type-signature"> &rarr; {function|Object}</span></h4>
 
     
@@ -307,7 +483,7 @@ that is stored in the browser.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line61">line 61</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line65">line 65</a>
     </li></ul></dd>
     
 
@@ -419,7 +595,7 @@ that is stored in the browser.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line99">line 99</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line103">line 103</a>
     </li></ul></dd>
     
 
@@ -703,7 +879,7 @@ Leave as default unless you know what you are doing.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line140">line 140</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line144">line 144</a>
     </li></ul></dd>
     
 
@@ -790,7 +966,7 @@ Leave as default unless you know what you are doing.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line71">line 71</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line75">line 75</a>
     </li></ul></dd>
     
 
@@ -881,7 +1057,7 @@ This will overwrite the current key</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Mar 04 2019 11:28:14 GMT+1100 (AEDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Mar 06 2019 12:38:33 GMT+1100 (AEDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

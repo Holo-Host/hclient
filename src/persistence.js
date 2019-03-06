@@ -1,10 +1,9 @@
 /**
- * persistence.js
  *
  * Interfaces with the browser local store to persist keybundles and host addresses
  *
  * The local store schema is as follows:
- *
+ * ```javascript
  * localStorage: {
  *     <hAppId>: {
  *         <hostAddress>: {keyBundle: <bundle object>, canWrite: true|false},
@@ -12,12 +11,11 @@
  *     },
  *     ... other hApps
  * }
+ * ```
  *
  * Host addresses are stored with the keyBundle that has been used on that host (if any).
  * There should be only a single active key pair used per host which may be readonly.
- *
- * @param      {<type>}  hAppId  The application identifier
- * @return     {string}  The or generate canWrite key.
+ * @module persistence
  */
 
 const storeHosts = (hAppId, hostAddresses, canWrite) => {

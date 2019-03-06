@@ -40,16 +40,20 @@ const hClient = (function () {
     // regenerateReadwriteKeypair
   } = require('./keyManagement')
 
-  const { showLoginDialog } = require('./login')
+  const {
+    showLoginDialog,
+    insertLoginHtml,
+    registerLoginCallbacks
+  } = require('./login')
+
+  const {
+    getDnaFromUrl,
+    getHostsFromUrl
+  } = requlre('./resolver')
 
   /* ============================================
   =            Public API Functions            =
   ============================================ */
-  // re-exports
-  const {
-    insertLoginHtml,
-    registerLoginCallbacks
-  } = require('./login')
 
   /**
    * Insert the HTML for the login dialog into the current document and register the callbacks
@@ -257,7 +261,9 @@ const hClient = (function () {
     triggerLoginPrompt,
     makeWebClient,
     getCurrentAgentId,
-    requestHosting
+    requestHosting,
+    getDnaFromUrl,
+    getHostsFromUrl
   }
 })()
 

@@ -1,5 +1,5 @@
 /**
- * resolver.js
+ * module resolver
  *
  * Interfaces with the holo resolver to locate the DNA or host tranche for a given URL.
  * This is not required in most cases where the UI is also hosted by Holo but in some cases
@@ -24,12 +24,22 @@ const callResolver = (params) => {
   })
 }
 
+/**
+ * Displays the login dialog and generates a new read/write key with the email/password
+ * This will overwrite the current key
+ * @memberof module:hClient
+ */
 const getHostsForUrl = (url) => {
   return callResolver(url)
     .then(r => r.json())
     .then(json => json.hosts)
 }
 
+/**
+ * Displays the login dialog and generates a new read/write key with the email/password
+ * This will overwrite the current key
+ * @memberof module:hClient
+ */
 const getDnaForUrl = (url) => {
   return callResolver(url)
     .then(r => r.json())

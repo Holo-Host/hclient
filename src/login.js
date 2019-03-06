@@ -1,3 +1,6 @@
+/**
+ @module login
+*/
 
 const fs = require('fs')
 const $ = require('jquery') // try and remove jquery in a refactor soon
@@ -37,8 +40,8 @@ const insertLoginHtml = function () {
 /**
  * Shows the login dialog.
  *
- * @param      {(string, string) => void}  onSuccess callback. Takes email and password
- * @param      {(string, string) => void}  onFailure callback. Takes email and password
+ * @param      {function}  onSuccess callback. Takes email and password
+ * @param      {function}  onFailure callback. Takes email and password
  */
 const showLoginDialog = function (onSuccess, onFailure) {
   const modal = document.querySelector('.holo-dialog')
