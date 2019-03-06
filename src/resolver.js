@@ -6,8 +6,7 @@
  * where the UI is hosted on the conventional web this is required to locate hosts.
  *
  */
-
-const resolverUrl = 'http://resolver.holohost.net'
+const resolverUrl = 'http://resolver.holohost.net/'
 
 const callResolver = (params) => {
   const body = Object.keys(params).map((key) => {
@@ -30,7 +29,7 @@ const callResolver = (params) => {
  * @memberof module:hClient
  */
 const getHostsForUrl = (url) => {
-  return callResolver(url)
+  return callResolver({ url })
     .then(r => r.json())
     .then(json => json.hosts)
 }
@@ -41,7 +40,7 @@ const getHostsForUrl = (url) => {
  * @memberof module:hClient
  */
 const getDnaForUrl = (url) => {
-  return callResolver(url)
+  return callResolver({ url })
     .then(r => r.json())
     .then(json => json.dna)
 }

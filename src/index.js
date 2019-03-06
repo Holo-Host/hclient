@@ -46,8 +46,8 @@ const hClient = (function () {
   } = require('./login')
 
   const {
-    getDnaFromUrl,
-    getHostsFromUrl
+    getDnaForUrl,
+    getHostsForUrl
   } = require('./resolver')
 
   /* ============================================
@@ -99,8 +99,8 @@ const hClient = (function () {
      * Takes a RPC-websockets object and returns it preCall=preCall, postCall=postCall, postConnect=postConnect.
      * Leave as default unless you know what you are doing.
      */
-  const makeWebClient = (holochainClient, url, preCall, postCall, postConnect) => {
-    url = url || getDefaultWebsocketUrl()
+  const makeWebClient = async (holochainClient, url, preCall, postCall, postConnect) => {
+    url = url || await getDefaultWebsocketUrl()
     preCall = preCall || _preCall
     postCall = postCall || _postCall
     postConnect = postConnect || _postConnect
@@ -155,9 +155,9 @@ const hClient = (function () {
    *
    * @return     {Object}  The default websocket url.
    */
-  const getDefaultWebsocketUrl = () => {
-    // for now just return the first host in the tranche
-    return getHostsFromUrl(window.location.hostname)[0]
+  const getDefaultWebsocketUrl = async () => {
+    const hosts = await getHostsForUrl(window.location.origin)
+    return 'ws://' + hosts[0]
   }
   // const getDefaultWebsocketUrl = () => document.getElementsByTagName('base')[0].href.replace('http', 'ws')
 
@@ -265,8 +265,8 @@ const hClient = (function () {
     makeWebClient,
     getCurrentAgentId,
     requestHosting,
-    getDnaFromUrl,
-    getHostsFromUrl
+    getDnaForUrl,
+    getHostsForUrl
   }
 })()
 

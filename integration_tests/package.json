@@ -10,17 +10,18 @@
     "cypress:open": "cypress open",
     "free-ports": "sh ./scripts/free_ports.sh",
     "start:1": "start-server-and-test start:loader http://localhost:3000 start:host",
-    
     "test": "start-server-and-test start:1 http://localhost:4000 cypress:run",
     "test:runner": "start-server-and-test start:1 http://localhost:4000 cypress:open"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/runtime": "^7.3.4",
     "cypress": "^3.1.5",
     "http-server": "^0.11.1"
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.3.4",
     "parcel-bundler": "^1.11.0",
     "start-server-and-test": "^1.7.11"
   }

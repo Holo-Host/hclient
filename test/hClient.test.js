@@ -33,7 +33,7 @@ describe('hClient: basic test', () => {
     const preCall = (callString, params) => ({ callString, params })
     const postCall = response => 'override response'
     const postConnect = ws => ws
-    const holoClient = hClient.makeWebClient(holochainClient, url, preCall, postCall, postConnect)
+    const holoClient = await hClient.makeWebClient(holochainClient, url, preCall, postCall, postConnect)
 
     // make a call with the overriden version
     let secondCallResult

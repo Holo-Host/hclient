@@ -16,25 +16,22 @@
 
   <script type="text/javascript">
 
-   window.holochainclient = window.hClient.makeWebClient(window.holochainclient)
-   window.hClient.installLoginDialog();
+window.hClient.installLoginDialog()
+window.hClient.makeWebClient(window.holochainclient).then(holoClient => {
+  holoClient.connect().then(({ call }) => {
+    document.getElementById('show-login').onclick = function () {
+      window.hClient.showLoginDialog()
+    }
 
-   window.holochainclient.connect().then(({call}) => {
+    document.getElementById('make-valid-call').onclick = function () {
+      call('instance', 'zome', 'needs_sig_function')({ test: 'parameters' }).then(result => console.log(result))
+    }
 
-     document.getElementById("show-login").onclick = function() {  
-          window.hClient.showLoginDialog(); 
-      };  
-
-      document.getElementById("make-valid-call").onclick = function() {  
-          call('instance', 'zome', 'needs_sig_function')({test: "parameters"}).then(result => console.log(result));
-      };  
-
-     document.getElementById("trigger-unauthorized").onclick = function() {  
-          call('instance', 'zome', 'unauthorized_function')({test : "parameters"}).then(result => console.log(result));
-      };  
-
-   });
-
-  </script>
+    document.getElementById('trigger-unauthorized').onclick = function () {
+      call('instance', 'zome', 'unauthorized_function')({ test: 'parameters' }).then(result => console.log(result))
+    }
+  })
+})
+</script>
 </body>
 </html>
