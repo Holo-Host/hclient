@@ -7,7 +7,7 @@
  *
  */
 
-const resolverUrl = '//resolver.holohost.net'
+const resolverUrl = 'http://resolver.holohost.net'
 
 const callResolver = (params) => {
   const body = Object.keys(params).map((key) => {

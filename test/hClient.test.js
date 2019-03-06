@@ -1,6 +1,6 @@
 const hClient = require('../src/index.js')
 const keyManagement = require('../src/keyManagement.js')
-const resolver = require('../resolver.js')
+const resolver = require('../src/resolver.js')
 
 describe('hClient: basic test', () => {
   it('should be able to override window.holochainClient', async () => {
@@ -88,5 +88,29 @@ describe('keyManagement', function () {
     )
     keypair._signPub.byteLength.should.equal(32)
     keypair._signPriv.byteLength.should.equal(64)
+  })
+})
+
+const fetchMock = require('fetch-mock')
+
+describe('resolver', function () {
+  before(() => {
+    fetchMock.post('http://resolver.holohost.net', {
+      requestURL: 'requested-url.something',
+      dna: 'a_working_dna',
+      hosts: [
+        'some-node-address'
+      ]
+    })
+  })
+
+  it('can call getDnaForUrl which triggers the correct network request', async () => {
+    let response = await resolver.getDnaForUrl('anything')
+    response.should.equal('a_working_dna')
+  })
+
+  it('can call getHostsForUrl which triggers the correct network request', async () => {
+    let response = await resolver.getHostsForUrl('anything')
+    response.should.deep.equal(['some-node-address'])
   })
 })
