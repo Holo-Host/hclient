@@ -1,4 +1,3 @@
-require('babel-polyfill')
 /**
  * The javascript library for making your web UI Holo enabled!
  *

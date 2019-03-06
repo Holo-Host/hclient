@@ -10,6 +10,7 @@
     "cypress:open": "cypress open",
     "free-ports": "sh ./scripts/free_ports.sh",
     "start:1": "start-server-and-test start:loader http://localhost:3000 start:host",
+    
     "test": "start-server-and-test start:1 http://localhost:4000 cypress:run",
     "test:runner": "start-server-and-test start:1 http://localhost:4000 cypress:open"
   },

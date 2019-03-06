@@ -8,10 +8,8 @@ app.use('/', express.static(path.join(__dirname, 'static')))
 const server = require('http').createServer(app)
 const WebSocketServer = require('rpc-websockets').Server
 
-
 const port = 4000
 let callbackId = 0
-
 
 // serve the websocket on the same port
 const wss = new WebSocketServer({ server })
@@ -55,6 +53,10 @@ wss.register('holo/clientSignature', ({signature, requestId}) => {
 })
 
 
-server.listen(port, () => {
-    console.log(`Server started on port ${server.address().port} :)`)
-})
+try {
+	server.listen(port, () => {
+	    console.log(`Server started on port ${server.address().port} :)`)
+	})
+} catch (e) {
+	console.error(e)
+}
