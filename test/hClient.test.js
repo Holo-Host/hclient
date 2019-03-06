@@ -1,5 +1,6 @@
 const hClient = require('../src/index.js')
 const keyManagement = require('../src/keyManagement.js')
+const resolver = require('../resolver.js')
 
 describe('hClient: basic test', () => {
   it('should be able to override window.holochainClient', async () => {
