@@ -105,9 +105,9 @@ const XorUint8Array = (a, b) => {
 /**
  * Full workflow for generating a new readonly key pair
  *
- * @parameter    {() => Promise}    remoteEntropyGenerator
- * @parameter    {() => Promise}    localEntropyGenerator
- * @return     {dpki-lite::Keypair}  The generated keypair object
+ * @param    {function}    remoteEntropyGenerator
+ * @param    {function}    localEntropyGenerator
+ * @return     {Object}  The generated keypair object
  */
 const generateReadonlyKeypair = async (
   remoteEntropyGenerator = getRemoteEntropy,
@@ -125,9 +125,9 @@ const generateReadonlyKeypair = async (
  *
  * @param      {string}  email     The email
  * @param      {string}  password  The password
- * @parameter    {() => Promise}    remoteEntropyGenerator
- * @parameter    {() => Promise}    localEntropyGenerator
- * @param      {(email: string, salt: string) => Promise} saltRegistrationCallback
+ * @param    {function}    remoteEntropyGenerator
+ * @param    {function}    localEntropyGenerator
+ * @param      {function} saltRegistrationCallback
  */
 const generateNewReadwriteKeypair = async (
   email,
@@ -156,8 +156,8 @@ const generateNewReadwriteKeypair = async (
  *
  * @param      {string}  email     The email
  * @param      {string}  password  The password
- * @param      {(email: string) => Promise} getRegisteredSaltCallback
- * @return     {dpki-lite::Keypair}  The generated keypair object
+ * @param      {function} getRegisteredSaltCallback
+ * @return     {function}  The generated keypair object
  */
 const regenerateReadwriteKeypair = async (
   email,

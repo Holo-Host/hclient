@@ -7,7 +7,16 @@
     "extends": "standard",
     "globals": {
         "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
+        "SharedArrayBuffer": "readonly",
+        "describe": "readonly",
+        "context": "readonly",
+        "before": "readonly",
+        "beforeEach": "readonly",
+        "after": "readonly",
+        "afterEach": "readonly",
+        "it": "readonly",
+        "expect": "readonly",
+        "cy": "readonly"
     },
     "parserOptions": {
         "ecmaVersion": 2018

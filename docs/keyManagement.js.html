@@ -26,7 +26,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-hClient.html">hClient</a><ul class='methods'><li data-type='method'><a href="module-hClient.html#.getCurrentAgentId">getCurrentAgentId</a></li><li data-type='method'><a href="module-hClient.html#.installLoginDialog">installLoginDialog</a></li><li data-type='method'><a href="module-hClient.html#.makeWebClient">makeWebClient</a></li><li data-type='method'><a href="module-hClient.html#.requestHosting">requestHosting</a></li><li data-type='method'><a href="module-hClient.html#.triggerLoginPrompt">triggerLoginPrompt</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#Base64Binary">Base64Binary</a></li><li><a href="global.html#callSaltmine">callSaltmine</a></li><li><a href="global.html#generateNewReadwriteKeypair">generateNewReadwriteKeypair</a></li><li><a href="global.html#generateReadonlyKeypair">generateReadonlyKeypair</a></li><li><a href="global.html#getLocalEntropy">getLocalEntropy</a></li><li><a href="global.html#getRegisteredSalt">getRegisteredSalt</a></li><li><a href="global.html#getRemoteEntropy">getRemoteEntropy</a></li><li><a href="global.html#insertLoginHtml">insertLoginHtml</a></li><li><a href="global.html#regenerateReadwriteKeypair">regenerateReadwriteKeypair</a></li><li><a href="global.html#registerLoginCallbacks">registerLoginCallbacks</a></li><li><a href="global.html#registerSalt">registerSalt</a></li><li><a href="global.html#showLoginDialog">showLoginDialog</a></li><li><a href="global.html#storeHosts">storeHosts</a></li><li><a href="global.html#XorUint8Array">XorUint8Array</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-hClient.html">hClient</a><ul class='methods'><li data-type='method'><a href="module-hClient.html#.getCurrentAgentId">getCurrentAgentId</a></li><li data-type='method'><a href="module-hClient.html#.getDnaForUrl">getDnaForUrl</a></li><li data-type='method'><a href="module-hClient.html#.getHostsForUrl">getHostsForUrl</a></li><li data-type='method'><a href="module-hClient.html#.installLoginDialog">installLoginDialog</a></li><li data-type='method'><a href="module-hClient.html#.makeWebClient">makeWebClient</a></li><li data-type='method'><a href="module-hClient.html#.requestHosting">requestHosting</a></li><li data-type='method'><a href="module-hClient.html#.triggerLoginPrompt">triggerLoginPrompt</a></li></ul></li><li><a href="module-login.html">login</a><ul class='methods'><li data-type='method'><a href="module-login.html#~insertLoginHtml">insertLoginHtml</a></li><li data-type='method'><a href="module-login.html#~registerLoginCallbacks">registerLoginCallbacks</a></li><li data-type='method'><a href="module-login.html#~showLoginDialog">showLoginDialog</a></li></ul></li><li><a href="module-persistence.html">persistence</a></li></ul><h3>Global</h3><ul><li><a href="global.html#callSaltmine">callSaltmine</a></li><li><a href="global.html#generateNewReadwriteKeypair">generateNewReadwriteKeypair</a></li><li><a href="global.html#generateReadonlyKeypair">generateReadonlyKeypair</a></li><li><a href="global.html#getLocalEntropy">getLocalEntropy</a></li><li><a href="global.html#getRegisteredSalt">getRegisteredSalt</a></li><li><a href="global.html#getRemoteEntropy">getRemoteEntropy</a></li><li><a href="global.html#regenerateReadwriteKeypair">regenerateReadwriteKeypair</a></li><li><a href="global.html#registerSalt">registerSalt</a></li><li><a href="global.html#resolverUrl">resolverUrl</a></li><li><a href="global.html#XorUint8Array">XorUint8Array</a></li></ul>
 </nav>
 
 <div id="main">
@@ -48,8 +48,7 @@
  *
  */
 
-const { Keypair, randomBytes, pwHash } = require('@holochain/dpki-lite')
-const Base64Binary = require('./base64-binary')
+const { Keypair, randomBytes, pwHash, fromBase64 } = require('./dpki-ultralite')
 
 const saltmineUrl = '//saltmine.holohost.net'
 
@@ -87,7 +86,7 @@ const callSaltmine = (method, params) => {
 const getRemoteEntropy = () => {
   return callSaltmine('GET')
     .then(r => r.text())
-    .then(Base64Binary.decodeArrayBuffer)
+    .then(fromBase64)
     .then((buffer) => new Uint8Array(buffer).slice(0, 32))
 }
 
@@ -101,7 +100,7 @@ const getRemoteEntropy = () => {
 const registerSalt = (email, salt) => {
   return callSaltmine('POST', { email, salt })
     .then(r => r.text())
-    .then(Base64Binary.decodeArrayBuffer)
+    .then(fromBase64)
     .then((buffer) => new Uint8Array(buffer).slice(0, 32))
 }
 
@@ -114,7 +113,7 @@ const registerSalt = (email, salt) => {
 const getRegisteredSalt = (email) => {
   return callSaltmine('POST', { email })
     .then(r => r.text())
-    .then(Base64Binary.decodeArrayBuffer)
+    .then(fromBase64)
     .then((buffer) => new Uint8Array(buffer).slice(0, 32))
 }
 
@@ -149,9 +148,9 @@ const XorUint8Array = (a, b) => {
 /**
  * Full workflow for generating a new readonly key pair
  *
- * @parameter    {() => Promise}    remoteEntropyGenerator
- * @parameter    {() => Promise}    localEntropyGenerator
- * @return     {dpki-lite::Keypair}  The generated keypair object
+ * @param    {function}    remoteEntropyGenerator
+ * @param    {function}    localEntropyGenerator
+ * @return     {Object}  The generated keypair object
  */
 const generateReadonlyKeypair = async (
   remoteEntropyGenerator = getRemoteEntropy,
@@ -169,9 +168,9 @@ const generateReadonlyKeypair = async (
  *
  * @param      {string}  email     The email
  * @param      {string}  password  The password
- * @parameter    {() => Promise}    remoteEntropyGenerator
- * @parameter    {() => Promise}    localEntropyGenerator
- * @param      {(email: string, salt: string) => Promise} saltRegistrationCallback
+ * @param    {function}    remoteEntropyGenerator
+ * @param    {function}    localEntropyGenerator
+ * @param      {function} saltRegistrationCallback
  */
 const generateNewReadwriteKeypair = async (
   email,
@@ -200,8 +199,8 @@ const generateNewReadwriteKeypair = async (
  *
  * @param      {string}  email     The email
  * @param      {string}  password  The password
- * @param      {(email: string) => Promise} getRegisteredSaltCallback
- * @return     {dpki-lite::Keypair}  The generated keypair object
+ * @param      {function} getRegisteredSaltCallback
+ * @return     {function}  The generated keypair object
  */
 const regenerateReadwriteKeypair = async (
   email,
@@ -235,7 +234,7 @@ module.exports = {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Mar 04 2019 11:03:59 GMT+1100 (AEDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Mar 06 2019 12:38:33 GMT+1100 (AEDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

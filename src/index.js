@@ -40,16 +40,20 @@ const hClient = (function () {
     // regenerateReadwriteKeypair
   } = require('./keyManagement')
 
-  const { showLoginDialog } = require('./login')
+  const {
+    showLoginDialog,
+    insertLoginHtml,
+    registerLoginCallbacks
+  } = require('./login')
+
+  const {
+    getDnaFromUrl,
+    getHostsFromUrl
+  } = require('./resolver')
 
   /* ============================================
   =            Public API Functions            =
   ============================================ */
-  // re-exports
-  const {
-    insertLoginHtml,
-    registerLoginCallbacks
-  } = require('./login')
 
   /**
    * Insert the HTML for the login dialog into the current document and register the callbacks
@@ -152,7 +156,11 @@ const hClient = (function () {
    *
    * @return     {Object}  The default websocket url.
    */
-  const getDefaultWebsocketUrl = () => document.getElementsByTagName('base')[0].href.replace('http', 'ws')
+  const getDefaultWebsocketUrl = () => {
+    // for now just return the first host in the tranche
+    return getHostsFromUrl(window.location.hostname)[0]
+  }
+  // const getDefaultWebsocketUrl = () => document.getElementsByTagName('base')[0].href.replace('http', 'ws')
 
   /**
    * Setter for the keypair
@@ -257,7 +265,9 @@ const hClient = (function () {
     triggerLoginPrompt,
     makeWebClient,
     getCurrentAgentId,
-    requestHosting
+    requestHosting,
+    getDnaFromUrl,
+    getHostsFromUrl
   }
 })()
 

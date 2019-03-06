@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>persistence - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -31,31 +31,145 @@
 
 <div id="main">
     
-
+    <h1 class="page-title">persistence</h1>
     
-
-
-
-    
-
-
-    <section class="package">
-        <h3> </h3>		
-    </section>
-
-
-
-
-
-
-
-
 
     
 
 
 
 
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+                <div class="description"><p>Interfaces with the browser local store to persist keybundles and host addresses</p>
+<p>The local store schema is as follows:</p>
+<pre class="prettyprint source lang-javascript"><code>localStorage: {
+    &lt;hAppId>: {
+        &lt;hostAddress>: {keyBundle: &lt;bundle object>, canWrite: true|false},
+        ... other hosts for this hApp
+    },
+    ... other hApps
+}</code></pre><p>Host addresses are stored with the keyBundle that has been used on that host (if any).
+There should be only a single active key pair used per host which may be readonly.</p></div>
+            
+
+            
+                
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="persistence.js.html">persistence.js</a>, <a href="persistence.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

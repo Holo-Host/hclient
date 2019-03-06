@@ -4,7 +4,7 @@
   "description": "Client side lib injected by holo loader",
   "main": "./src/index.js",
   "scripts": {
-    "build": "parcel build ./src/index.js --global hClient -o ./dist/hClient.js",
+    "build": "parcel build ./src/index.js --global hClient -o ./dist/hclient-$npm_package_version.browser.min.js",
     "doc": "jsdoc -c jsdoc.json",
     "lint": "eslint ./src/",
     "lint:fix": "eslint ./src/ --fix",
@@ -28,8 +28,10 @@
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
+    "fetch-mock": "^7.3.1",
     "jsdoc": "^3.5.5",
     "mocha": "^6.0.2",
+    "node-fetch": "^2.3.0",
     "parcel": "^1.11.0",
     "parcel-plugin-inliner": "^1.0.4",
     "stylus": "^0.54.5"

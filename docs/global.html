@@ -26,7 +26,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-hClient.html">hClient</a><ul class='methods'><li data-type='method'><a href="module-hClient.html#.getCurrentAgentId">getCurrentAgentId</a></li><li data-type='method'><a href="module-hClient.html#.installLoginDialog">installLoginDialog</a></li><li data-type='method'><a href="module-hClient.html#.makeWebClient">makeWebClient</a></li><li data-type='method'><a href="module-hClient.html#.requestHosting">requestHosting</a></li><li data-type='method'><a href="module-hClient.html#.triggerLoginPrompt">triggerLoginPrompt</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#Base64Binary">Base64Binary</a></li><li><a href="global.html#callSaltmine">callSaltmine</a></li><li><a href="global.html#generateNewReadwriteKeypair">generateNewReadwriteKeypair</a></li><li><a href="global.html#generateReadonlyKeypair">generateReadonlyKeypair</a></li><li><a href="global.html#getLocalEntropy">getLocalEntropy</a></li><li><a href="global.html#getRegisteredSalt">getRegisteredSalt</a></li><li><a href="global.html#getRemoteEntropy">getRemoteEntropy</a></li><li><a href="global.html#insertLoginHtml">insertLoginHtml</a></li><li><a href="global.html#regenerateReadwriteKeypair">regenerateReadwriteKeypair</a></li><li><a href="global.html#registerLoginCallbacks">registerLoginCallbacks</a></li><li><a href="global.html#registerSalt">registerSalt</a></li><li><a href="global.html#showLoginDialog">showLoginDialog</a></li><li><a href="global.html#storeHosts">storeHosts</a></li><li><a href="global.html#XorUint8Array">XorUint8Array</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-hClient.html">hClient</a><ul class='methods'><li data-type='method'><a href="module-hClient.html#.getCurrentAgentId">getCurrentAgentId</a></li><li data-type='method'><a href="module-hClient.html#.getDnaForUrl">getDnaForUrl</a></li><li data-type='method'><a href="module-hClient.html#.getHostsForUrl">getHostsForUrl</a></li><li data-type='method'><a href="module-hClient.html#.installLoginDialog">installLoginDialog</a></li><li data-type='method'><a href="module-hClient.html#.makeWebClient">makeWebClient</a></li><li data-type='method'><a href="module-hClient.html#.requestHosting">requestHosting</a></li><li data-type='method'><a href="module-hClient.html#.triggerLoginPrompt">triggerLoginPrompt</a></li></ul></li><li><a href="module-login.html">login</a><ul class='methods'><li data-type='method'><a href="module-login.html#~insertLoginHtml">insertLoginHtml</a></li><li data-type='method'><a href="module-login.html#~registerLoginCallbacks">registerLoginCallbacks</a></li><li data-type='method'><a href="module-login.html#~showLoginDialog">showLoginDialog</a></li></ul></li><li><a href="module-persistence.html">persistence</a></li></ul><h3>Global</h3><ul><li><a href="global.html#callSaltmine">callSaltmine</a></li><li><a href="global.html#generateNewReadwriteKeypair">generateNewReadwriteKeypair</a></li><li><a href="global.html#generateReadonlyKeypair">generateReadonlyKeypair</a></li><li><a href="global.html#getLocalEntropy">getLocalEntropy</a></li><li><a href="global.html#getRegisteredSalt">getRegisteredSalt</a></li><li><a href="global.html#getRemoteEntropy">getRemoteEntropy</a></li><li><a href="global.html#regenerateReadwriteKeypair">regenerateReadwriteKeypair</a></li><li><a href="global.html#registerSalt">registerSalt</a></li><li><a href="global.html#resolverUrl">resolverUrl</a></li><li><a href="global.html#XorUint8Array">XorUint8Array</a></li></ul>
 </nav>
 
 <div id="main">
@@ -118,7 +118,7 @@
 
         
             
-<h4 class="name" id="Base64Binary"><span class="type-signature">(constant) </span>Base64Binary<span class="type-signature"></span></h4>
+<h4 class="name" id="resolverUrl"><span class="type-signature">(constant) </span>resolverUrl<span class="type-signature"></span></h4>
 
 
 
@@ -129,7 +129,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="base64-binary.js.html">base64-binary.js</a>, <a href="base64-binary.js.html#line36">line 36</a>
+        <a href="resolver.js.html">resolver.js</a>, <a href="resolver.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -169,13 +169,10 @@
 
 
 <div class="description">
-    <p>Uses the new array typed in javascript to binary base64 encode/decode
-at the moment just decodes a binary base64 encoded
-into either an ArrayBuffer (decodeArrayBuffer)
-or into an Uint8Array (decode)</p>
-<p>References:
-https://developer.mozilla.org/en/JavaScript_typed_arrays/ArrayBuffer
-https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array</p>
+    <p>module resolver</p>
+<p>Interfaces with the holo resolver to locate the DNA or host tranche for a given URL.
+This is not required in most cases where the UI is also hosted by Holo but in some cases
+where the UI is hosted on the conventional web this is required to locate hosts.</p>
 </div>
 
 
@@ -208,7 +205,7 @@ https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line20">line 20</a>
+        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line19">line 19</a>
     </li></ul></dd>
     
 
@@ -377,7 +374,7 @@ https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array</p>
 
     
 
-    <h4 class="name" id="generateNewReadwriteKeypair"><span class="type-signature">(async) </span>generateNewReadwriteKeypair<span class="signature">(email, password)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="generateNewReadwriteKeypair"><span class="type-signature">(async) </span>generateNewReadwriteKeypair<span class="signature">(email, password, remoteEntropyGenerator, localEntropyGenerator, saltRegistrationCallback)</span><span class="type-signature"></span></h4>
 
     
 
@@ -389,7 +386,7 @@ https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line133">line 133</a>
+        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line132">line 132</a>
     </li></ul></dd>
     
 
@@ -513,10 +510,61 @@ https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array</p>
 
         <tr>
             
-                <td class="name"><code></code></td>
+                <td class="name"><code>remoteEntropyGenerator</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>localEntropyGenerator</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>saltRegistrationCallback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
             
             </td>
 
@@ -554,7 +602,7 @@ https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array</p>
 
     
 
-    <h4 class="name" id="generateReadonlyKeypair"><span class="type-signature">(async) </span>generateReadonlyKeypair<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="generateReadonlyKeypair"><span class="type-signature">(async) </span>generateReadonlyKeypair<span class="signature">(remoteEntropyGenerator, localEntropyGenerator)</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
     
 
@@ -566,7 +614,7 @@ https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line113">line 113</a>
+        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line112">line 112</a>
     </li></ul></dd>
     
 
@@ -619,6 +667,78 @@ https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array</p>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>remoteEntropyGenerator</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>localEntropyGenerator</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -636,7 +756,23 @@ https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array</p>
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    <p>The generated keypair object</p>
+</div>
 
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
 
     
 
@@ -659,7 +795,7 @@ https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line83">line 83</a>
+        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line82">line 82</a>
     </li></ul></dd>
     
 
@@ -768,7 +904,7 @@ https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line71">line 71</a>
+        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line70">line 70</a>
     </li></ul></dd>
     
 
@@ -926,7 +1062,7 @@ https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line44">line 44</a>
+        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -1023,7 +1159,7 @@ https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array</p>
 
     
 
-    <h4 class="name" id="insertLoginHtml"><span class="type-signature"></span>insertLoginHtml<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="regenerateReadwriteKeypair"><span class="type-signature">(async) </span>regenerateReadwriteKeypair<span class="signature">(email, password, getRegisteredSaltCallback)</span><span class="type-signature"> &rarr; {function}</span></h4>
 
     
 
@@ -1035,96 +1171,7 @@ https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="login.js.html">login.js</a>, <a href="login.js.html#line10">line 10</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Inserts the login page in to the current document HTML.
-It will be invisible and should not alter current page until
-triggered to display</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="regenerateReadwriteKeypair"><span class="type-signature">(async) </span>regenerateReadwriteKeypair<span class="signature">(email, password)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line163">line 163</a>
+        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line162">line 162</a>
     </li></ul></dd>
     
 
@@ -1249,10 +1296,15 @@ the given email address</p>
 
         <tr>
             
-                <td class="name"><code></code></td>
+                <td class="name"><code>getRegisteredSaltCallback</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
             
             </td>
 
@@ -1285,97 +1337,25 @@ the given email address</p>
 <h5>Returns:</h5>
 
         
-
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="registerLoginCallbacks"><span class="type-signature"></span>registerLoginCallbacks<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="login.js.html">login.js</a>, <a href="login.js.html#line54">line 54</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Registers all the functionality of the login dialog.
-This must be on page load called for it to work</p>
+<div class="param-desc">
+    <p>The generated keypair object</p>
 </div>
 
 
 
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
 
 
+    </dd>
+</dl>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
 
@@ -1396,7 +1376,7 @@ This must be on page load called for it to work</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line58">line 58</a>
+        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line57">line 57</a>
     </li></ul></dd>
     
 
@@ -1565,309 +1545,6 @@ This must be on page load called for it to work</p>
 
     
 
-    <h4 class="name" id="showLoginDialog"><span class="type-signature"></span>showLoginDialog<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="login.js.html">login.js</a>, <a href="login.js.html#line43">line 43</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Shows the login dialog.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="storeHosts"><span class="type-signature"></span>storeHosts<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="persistence.js.html">persistence.js</a>, <a href="persistence.js.html#line23">line 23</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>persistence.js</p>
-<p>Interfaces with the browser local store to persist keybundles and host addresses</p>
-<p>The local store schema is as follows:</p>
-<p>localStorage: {
-    <hAppId>: {
-        <hostAddress>: {keyBundle: <bundle object>, canWrite: true|false},
-        ... other hosts for this hApp
-    },
-    ... other hApps
-}</p>
-<p>Host addresses are stored with the keyBundle that has been used on that host (if any).
-There should be only a single active key pair used per host which may be readonly.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>The or generate canWrite key.</p>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
     <h4 class="name" id="XorUint8Array"><span class="type-signature"></span>XorUint8Array<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
@@ -1880,7 +1557,7 @@ There should be only a single active key pair used per host which may be readonl
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line98">line 98</a>
+        <a href="keyManagement.js.html">keyManagement.js</a>, <a href="keyManagement.js.html#line97">line 97</a>
     </li></ul></dd>
     
 
@@ -1971,7 +1648,7 @@ Surely there is a better way to do this? This is the best I could find</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Mar 04 2019 11:03:59 GMT+1100 (AEDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Mar 06 2019 12:38:33 GMT+1100 (AEDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -3,9 +3,9 @@
         "allowUnknownTags": false
     },
     "source": {
-        "include": "./src/index.js",
+        "include": "./src/",
         "includePattern": ".js$",
-        "excludePattern": "(node_modules/|docs)"
+        "excludePattern": "(node_modules/|docs/|dpki-ultralite/)"
     },
     "plugins": [
         "plugins/markdown"
