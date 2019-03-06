@@ -49,7 +49,7 @@ const hClient = (function () {
   const {
     getDnaFromUrl,
     getHostsFromUrl
-  } = requlre('./resolver')
+  } = require('./resolver')
 
   /* ============================================
   =            Public API Functions            =
