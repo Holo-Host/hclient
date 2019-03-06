@@ -39,15 +39,6 @@ This has its own inline scoped CSS and should not interfere with the rest of the
 
 Before trying to run any tests the repo needs to be initialised with
 ```
-# initialize the dpki-lite submodule
-git submodule init 
-git submodule update
-
-# apply the patch for memlimit for now
-cd ./dpki-lite.js
-git apply ../dpki-lite.patch
-
-cd ..
 npm install
 ```
 

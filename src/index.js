@@ -139,7 +139,7 @@ const hClient = (function () {
    */
   const requestHosting = async () => {
     if (websocket) {
-      websocket.call('holo/get-hosted', { agentId: getCurrentAgentId() })
+      websocket.call('holo/agents/new', { agentId: getCurrentAgentId() })
     } else {
       throw Error('Cannot request registration with no websocket')
     }

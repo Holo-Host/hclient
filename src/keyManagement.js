@@ -5,8 +5,7 @@
  *
  */
 
-const { Keypair, randomBytes, pwHash } = require('@holochain/dpki-lite')
-const Base64Binary = require('./base64-binary')
+const { Keypair, randomBytes, pwHash, fromBase64 } = require('./dpki-ultralite')
 
 const saltmineUrl = '//saltmine.holohost.net'
 
@@ -44,7 +43,7 @@ const callSaltmine = (method, params) => {
 const getRemoteEntropy = () => {
   return callSaltmine('GET')
     .then(r => r.text())
-    .then(Base64Binary.decodeArrayBuffer)
+    .then(fromBase64)
     .then((buffer) => new Uint8Array(buffer).slice(0, 32))
 }
 
@@ -58,7 +57,7 @@ const getRemoteEntropy = () => {
 const registerSalt = (email, salt) => {
   return callSaltmine('POST', { email, salt })
     .then(r => r.text())
-    .then(Base64Binary.decodeArrayBuffer)
+    .then(fromBase64)
     .then((buffer) => new Uint8Array(buffer).slice(0, 32))
 }
 
@@ -71,7 +70,7 @@ const registerSalt = (email, salt) => {
 const getRegisteredSalt = (email) => {
   return callSaltmine('POST', { email })
     .then(r => r.text())
-    .then(Base64Binary.decodeArrayBuffer)
+    .then(fromBase64)
     .then((buffer) => new Uint8Array(buffer).slice(0, 32))
 }
 
