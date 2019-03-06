@@ -156,7 +156,11 @@ const hClient = (function () {
    *
    * @return     {Object}  The default websocket url.
    */
-  const getDefaultWebsocketUrl = () => document.getElementsByTagName('base')[0].href.replace('http', 'ws')
+  const getDefaultWebsocketUrl = () => {
+    // for now just return the first host in the tranche
+    return getHostsFromUrl(window.location.hostname)[0]
+  }
+  // const getDefaultWebsocketUrl = () => document.getElementsByTagName('base')[0].href.replace('http', 'ws')
 
   /**
    * Setter for the keypair
