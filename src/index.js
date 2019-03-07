@@ -243,9 +243,9 @@ const hClient = (function () {
     }
 
     // TODO: Sign the response and sent it back to the interceptor (check this is still required)
-    // TODO: Unpack the response to expose to the UI code (make it look like a regular holochain call)
+    // const responseSig = keypair.sign()
 
-    return response
+    return response.payload
   }
 
   /**
