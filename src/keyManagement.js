@@ -5,7 +5,7 @@
  *
  */
 
-const { Keypair, randomBytes, pwHash, fromBase64 } = require('./dpki-ultralite')
+const { Keypair, randomBytes, pwHash, fromBase64, toBase64 } = require('./dpki-ultralite')
 
 const saltmineUrl = '//saltmine.holohost.net'
 
@@ -138,8 +138,16 @@ const generateNewReadwriteKeypair = async (
 ) => {
   const remoteEntropy = await remoteEntropyGenerator()
   const localEntropy = await localEntropyGenerator()
-  const salt = XorUint8Array(remoteEntropy, localEntropy)
-  const registeredSalt = await saltRegistrationCallback(email, salt)
+  const saltBytes = XorUint8Array(remoteEntropy, localEntropy)
+  const saltString = await toBase64(saltBytes)
+
+  let registeredSalt
+  try {
+    registeredSalt = await saltRegistrationCallback(email, saltString)
+  } catch (e) {
+    console.error('could not register salt. Proceeding unregistered', e)
+    registeredSalt = saltString
+  }
 
   console.log('password', password)
   console.log('registerSalt', registeredSalt)

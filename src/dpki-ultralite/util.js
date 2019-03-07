@@ -91,8 +91,8 @@ function pwHash (pass, salt) {
   return new Promise((resolve, reject) => {
     _sodium.ready.then((_) => {
       const opt = {
-        opslimit: _sodium.crypto_pwhash_OPSLIMIT_MODERATE,
-        memlimit: _sodium.crypto_pwhash_MEMLIMIT_MODERATE,
+        opslimit: _sodium.crypto_pwhash_OPSLIMIT_INTERACTIVE,
+        memlimit: _sodium.crypto_pwhash_MEMLIMIT_INTERACTIVE,
         algorithm: _sodium.crypto_pwhash_ALG_ARGON2ID13,
         keyLength: 32
       }
@@ -177,7 +177,7 @@ function toBase64 (buffer) {
   return _sodium.ready.then((_) => {
     return _sodium.to_base64(
       buffer,
-      _sodium.base64_variants.URLSAFE_NO_PADDING
+      _sodium.base64_variants.ORIGINAL
     )
   })
 }
@@ -195,7 +195,7 @@ function fromBase64 (str) {
   return _sodium.ready.then((_) => {
     return _sodium.from_base64(
       str,
-      _sodium.base64_variants.URLSAFE_NO_PADDING
+      _sodium.base64_variants.ORIGINAL
     )
   })
 }

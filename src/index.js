@@ -50,6 +50,10 @@ const hClient = (function () {
     getHostsForUrl
   } = require('./resolver')
 
+  const {
+    toBase64
+  } = require('./dpki-ultralite')
+
   /* ============================================
   =            Public API Functions            =
   ============================================ */
@@ -127,9 +131,9 @@ const hClient = (function () {
      *
      * @return     {(Encoding|Object)}  The current agent identifier.
      */
-  const getCurrentAgentId = () => {
+  const getCurrentAgentId = async () => {
     if (keypair) {
-      return keypair.getId()
+      return toBase64(keypair.getId())
     } else {
       return undefined
     }
@@ -142,7 +146,7 @@ const hClient = (function () {
    */
   const requestHosting = async () => {
     if (websocket) {
-      websocket.call('holo/agents/new', { agentId: getCurrentAgentId() })
+      await websocket.call('holo/agents/new', { agentKey: await getCurrentAgentId(), happId: 'simple-app' })
     } else {
       throw Error('Cannot request registration with no websocket')
     }
@@ -170,21 +174,22 @@ const hClient = (function () {
   const setKeypair = async (kp) => {
     keypair = kp
 
-    // set up the websocket to sign on request
-    const event = `agent/${getCurrentAgentId()}/sign`
-
     if (websocket) {
-      const response = await websocket.call('holo/identify', { agentId: getCurrentAgentId() })
-      if (response.Ok) {
-        websocket.subscribe(event)
-        websocket.on(event, async ({ entry, id }) => {
-          const signature = await keypair.sign(entry)
-          websocket.call('holo/clientSignature', {
-            signature,
-            requestId: id
-          })
+      const agentKey = await getCurrentAgentId()
+      await websocket.call('holo/identify', { agentKey })
+      // set up the websocket to sign on request
+      const event = `agent/${agentKey}/sign`
+      console.log('subscribing to event', event)
+
+      websocket.subscribe(event)
+      websocket.on(event, async ({ entry, id }) => {
+        const signature = await keypair.sign(entry)
+        const signatureBase64 = await toBase64(signature)
+        websocket.call('holo/clientSignature', {
+          signature: signatureBase64,
+          requestId: id
         })
-      }
+      })
     } else {
       throw Error('Could not register callback as no valid websocket instance found')
     }
@@ -211,9 +216,9 @@ const hClient = (function () {
       const signature = await keypair.sign(JSON.stringify(call))
 
       const callParams = {
-        agentId: getCurrentAgentId(),
+        agentKey: await getCurrentAgentId(),
         happId: 'TODO',
-        dnaHash: 'TODO',
+        dnaHash: 'Qm_DNA_Simple_App',
         function: callString,
         params,
         signature
