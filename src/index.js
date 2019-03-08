@@ -149,7 +149,7 @@ const hClient = (function () {
    */
   const requestHosting = async () => {
     if (websocket) {
-      await websocket.call('holo/agents/new', { agentKey: await getCurrentAgentId(), happId: 'simple-app' })
+      await websocket.call('holo/agents/new', { agentId: await getCurrentAgentId(), happId: 'simple-app' })
     } else {
       throw Error('Cannot request registration with no websocket')
     }
@@ -178,10 +178,10 @@ const hClient = (function () {
     keypair = kp
 
     if (websocket) {
-      const agentKey = await getCurrentAgentId()
-      await websocket.call('holo/identify', { agentKey })
+      const agentId = await getCurrentAgentId()
+      await websocket.call('holo/identify', { agentId })
       // set up the websocket to sign on request
-      const event = `agent/${agentKey}/sign`
+      const event = `agent/${agentId}/sign`
       console.log('subscribing to event', event)
 
       websocket.subscribe(event)
@@ -219,7 +219,7 @@ const hClient = (function () {
       const signature = await keypair.sign(JSON.stringify(call))
 
       const callParams = {
-        agentKey: await getCurrentAgentId(),
+        agentId: await getCurrentAgentId(),
         happId: 'TODO',
         dnaHash: 'Qm_DNA_Simple_App',
         function: callString,
