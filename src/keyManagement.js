@@ -27,6 +27,7 @@ const callSaltmine = (method, params) => {
   }
   return fetch(saltmineUrl, {
     method: method,
+    // mode: 'no-cors',
     cache: 'no-cache',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded' // Do not change or CORS will come and eat you alive (it does anyway!)

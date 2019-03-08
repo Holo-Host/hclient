@@ -54,6 +54,8 @@ const hClient = (function () {
     toBase64
   } = require('./dpki-ultralite')
 
+  const { Encoding } = require('@holochain/hcid-js')
+
   /* ============================================
   =            Public API Functions            =
   ============================================ */
@@ -133,7 +135,8 @@ const hClient = (function () {
      */
   const getCurrentAgentId = async () => {
     if (keypair) {
-      return toBase64(keypair.getId())
+      const enc = new Encoding('hcs0')
+      return enc.encode(keypair._signPub)
     } else {
       return undefined
     }
@@ -235,7 +238,7 @@ const hClient = (function () {
      * @return     {string}  Updated response
      */
   const _postCall = (response) => {
-    response = JSON.parse(response)
+    console.log(response)
 
     // Check response for authentication error to see if login is required
     if (response.Err && response.Err.code === 401) {
@@ -245,7 +248,7 @@ const hClient = (function () {
     // TODO: Sign the response and sent it back to the interceptor (check this is still required)
     // const responseSig = keypair.sign()
 
-    return response.payload
+    return response
   }
 
   /**

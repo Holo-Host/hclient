@@ -95,8 +95,7 @@ class Keypair {
    * @return {string}
    */
   getId () {
-    return this._signPub
-    // return this._pubkeys
+    return this._pubkeys
   }
 
   /**
