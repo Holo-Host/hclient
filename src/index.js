@@ -79,11 +79,22 @@ const hClient = (function () {
    */
   const triggerLoginPrompt = () => {
     showLoginDialog((email, password) => {
-      generateNewReadwriteKeypair(email, password).then(kp => {
-        console.log('Registered keypair is ', kp)
-        setKeypair(kp)
-        requestHosting()
-      })
+      startLoginProcess(email, password)
+    })
+  }
+
+  /**
+   * Start the local key generation/regeneration process with an email and password
+   *
+   * @param      {string}                    email     The email
+   * @param      {string}                    password  The password
+   * @memberof module:hClient
+   */
+  const startLoginProcess = (email, password) => {
+    generateNewReadwriteKeypair(email, password).then(kp => {
+      console.log('Registered keypair is ', kp)
+      setKeypair(kp)
+      requestHosting()
     })
   }
 
@@ -270,6 +281,7 @@ const hClient = (function () {
   return {
     installLoginDialog,
     triggerLoginPrompt,
+    startLoginProcess,
     makeWebClient,
     getCurrentAgentId,
     requestHosting,

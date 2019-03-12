@@ -26,7 +26,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-hClient.html">hClient</a><ul class='methods'><li data-type='method'><a href="module-hClient.html#.getCurrentAgentId">getCurrentAgentId</a></li><li data-type='method'><a href="module-hClient.html#.getDnaForUrl">getDnaForUrl</a></li><li data-type='method'><a href="module-hClient.html#.getHostsForUrl">getHostsForUrl</a></li><li data-type='method'><a href="module-hClient.html#.installLoginDialog">installLoginDialog</a></li><li data-type='method'><a href="module-hClient.html#.makeWebClient">makeWebClient</a></li><li data-type='method'><a href="module-hClient.html#.requestHosting">requestHosting</a></li><li data-type='method'><a href="module-hClient.html#.triggerLoginPrompt">triggerLoginPrompt</a></li></ul></li><li><a href="module-login.html">login</a><ul class='methods'><li data-type='method'><a href="module-login.html#~insertLoginHtml">insertLoginHtml</a></li><li data-type='method'><a href="module-login.html#~registerLoginCallbacks">registerLoginCallbacks</a></li><li data-type='method'><a href="module-login.html#~showLoginDialog">showLoginDialog</a></li></ul></li><li><a href="module-persistence.html">persistence</a></li></ul><h3>Global</h3><ul><li><a href="global.html#callSaltmine">callSaltmine</a></li><li><a href="global.html#generateNewReadwriteKeypair">generateNewReadwriteKeypair</a></li><li><a href="global.html#generateReadonlyKeypair">generateReadonlyKeypair</a></li><li><a href="global.html#getLocalEntropy">getLocalEntropy</a></li><li><a href="global.html#getRegisteredSalt">getRegisteredSalt</a></li><li><a href="global.html#getRemoteEntropy">getRemoteEntropy</a></li><li><a href="global.html#regenerateReadwriteKeypair">regenerateReadwriteKeypair</a></li><li><a href="global.html#registerSalt">registerSalt</a></li><li><a href="global.html#resolverUrl">resolverUrl</a></li><li><a href="global.html#XorUint8Array">XorUint8Array</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-hClient.html">hClient</a><ul class='methods'><li data-type='method'><a href="module-hClient.html#.getCurrentAgentId">getCurrentAgentId</a></li><li data-type='method'><a href="module-hClient.html#.getDnaForUrl">getDnaForUrl</a></li><li data-type='method'><a href="module-hClient.html#.getHostsForUrl">getHostsForUrl</a></li><li data-type='method'><a href="module-hClient.html#.installLoginDialog">installLoginDialog</a></li><li data-type='method'><a href="module-hClient.html#.makeWebClient">makeWebClient</a></li><li data-type='method'><a href="module-hClient.html#.requestHosting">requestHosting</a></li><li data-type='method'><a href="module-hClient.html#.startLoginProcess">startLoginProcess</a></li><li data-type='method'><a href="module-hClient.html#.triggerLoginPrompt">triggerLoginPrompt</a></li></ul></li><li><a href="module-login.html">login</a><ul class='methods'><li data-type='method'><a href="module-login.html#~insertLoginHtml">insertLoginHtml</a></li><li data-type='method'><a href="module-login.html#~registerLoginCallbacks">registerLoginCallbacks</a></li><li data-type='method'><a href="module-login.html#~showLoginDialog">showLoginDialog</a></li></ul></li><li><a href="module-persistence.html">persistence</a></li></ul><h3>Global</h3><ul><li><a href="global.html#callSaltmine">callSaltmine</a></li><li><a href="global.html#generateNewReadwriteKeypair">generateNewReadwriteKeypair</a></li><li><a href="global.html#generateReadonlyKeypair">generateReadonlyKeypair</a></li><li><a href="global.html#getLocalEntropy">getLocalEntropy</a></li><li><a href="global.html#getRegisteredSalt">getRegisteredSalt</a></li><li><a href="global.html#getRemoteEntropy">getRemoteEntropy</a></li><li><a href="global.html#regenerateReadwriteKeypair">regenerateReadwriteKeypair</a></li><li><a href="global.html#registerSalt">registerSalt</a></li><li><a href="global.html#resolverUrl">resolverUrl</a></li><li><a href="global.html#XorUint8Array">XorUint8Array</a></li></ul>
 </nav>
 
 <div id="main">
@@ -93,6 +93,12 @@ const hClient = (function () {
     getHostsForUrl
   } = require('./resolver')
 
+  const {
+    toBase64
+  } = require('./dpki-ultralite')
+
+  const { Encoding } = require('@holochain/hcid-js')
+
   /* ============================================
   =            Public API Functions            =
   ============================================ */
@@ -116,11 +122,22 @@ const hClient = (function () {
    */
   const triggerLoginPrompt = () => {
     showLoginDialog((email, password) => {
-      generateNewReadwriteKeypair(email, password).then(kp => {
-        console.log('Registered keypair is ', kp)
-        setKeypair(kp)
-        requestHosting()
-      })
+      startLoginProcess(email, password)
+    })
+  }
+
+  /**
+   * Start the local key generation/regeneration process with an email and password
+   *
+   * @param      {string}                    email     The email
+   * @param      {string}                    password  The password
+   * @memberof module:hClient
+   */
+  const startLoginProcess = (email, password) => {
+    generateNewReadwriteKeypair(email, password).then(kp => {
+      console.log('Registered keypair is ', kp)
+      setKeypair(kp)
+      requestHosting()
     })
   }
 
@@ -170,9 +187,10 @@ const hClient = (function () {
      *
      * @return     {(Encoding|Object)}  The current agent identifier.
      */
-  const getCurrentAgentId = () => {
+  const getCurrentAgentId = async () => {
     if (keypair) {
-      return keypair.getId()
+      const enc = new Encoding('hcs0')
+      return enc.encode(keypair._signPub)
     } else {
       return undefined
     }
@@ -185,7 +203,7 @@ const hClient = (function () {
    */
   const requestHosting = async () => {
     if (websocket) {
-      websocket.call('holo/agents/new', { agentId: getCurrentAgentId() })
+      await websocket.call('holo/agents/new', { agentId: await getCurrentAgentId(), happId: 'simple-app' })
     } else {
       throw Error('Cannot request registration with no websocket')
     }
@@ -213,21 +231,22 @@ const hClient = (function () {
   const setKeypair = async (kp) => {
     keypair = kp
 
-    // set up the websocket to sign on request
-    const event = `agent/${getCurrentAgentId()}/sign`
-
     if (websocket) {
-      const response = await websocket.call('holo/identify', { agentId: getCurrentAgentId() })
-      if (response.Ok) {
-        websocket.subscribe(event)
-        websocket.on(event, async ({ entry, id }) => {
-          const signature = await keypair.sign(entry)
-          websocket.call('holo/clientSignature', {
-            signature,
-            requestId: id
-          })
+      const agentId = await getCurrentAgentId()
+      await websocket.call('holo/identify', { agentId })
+      // set up the websocket to sign on request
+      const event = `agent/${agentId}/sign`
+      console.log('subscribing to event', event)
+
+      websocket.subscribe(event)
+      websocket.on(event, async ({ entry, id }) => {
+        const signature = await keypair.sign(entry)
+        const signatureBase64 = await toBase64(signature)
+        websocket.call('holo/clientSignature', {
+          signature: signatureBase64,
+          requestId: id
         })
-      }
+      })
     } else {
       throw Error('Could not register callback as no valid websocket instance found')
     }
@@ -254,9 +273,9 @@ const hClient = (function () {
       const signature = await keypair.sign(JSON.stringify(call))
 
       const callParams = {
-        agentId: getCurrentAgentId(),
+        agentId: await getCurrentAgentId(),
         happId: 'TODO',
-        dnaHash: 'TODO',
+        dnaHash: 'Qm_DNA_Simple_App',
         function: callString,
         params,
         signature
@@ -273,7 +292,7 @@ const hClient = (function () {
      * @return     {string}  Updated response
      */
   const _postCall = (response) => {
-    response = JSON.parse(response)
+    console.log(response)
 
     // Check response for authentication error to see if login is required
     if (response.Err &amp;&amp; response.Err.code === 401) {
@@ -281,7 +300,7 @@ const hClient = (function () {
     }
 
     // TODO: Sign the response and sent it back to the interceptor (check this is still required)
-    // TODO: Unpack the response to expose to the UI code (make it look like a regular holochain call)
+    // const responseSig = keypair.sign()
 
     return response
   }
@@ -305,6 +324,7 @@ const hClient = (function () {
   return {
     installLoginDialog,
     triggerLoginPrompt,
+    startLoginProcess,
     makeWebClient,
     getCurrentAgentId,
     requestHosting,
@@ -328,7 +348,7 @@ module.exports = hClient
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Mar 06 2019 15:24:27 GMT+1100 (AEDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Mar 12 2019 17:31:30 GMT+1100 (AEDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
