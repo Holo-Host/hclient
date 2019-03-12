@@ -1,3 +1,5 @@
+const fetchMock = require('fetch-mock')
+
 const hClient = require('../src/index.js')
 const keyManagement = require('../src/keyManagement.js')
 const resolver = require('../src/resolver.js')
@@ -91,8 +93,6 @@ describe('keyManagement', function () {
   })
 })
 
-const fetchMock = require('fetch-mock')
-
 describe('resolver', function () {
   before(() => {
     fetchMock.post('http://resolver.holohost.net', {
@@ -114,3 +114,5 @@ describe('resolver', function () {
     response.should.deep.equal(['some-node-address'])
   })
 })
+
+

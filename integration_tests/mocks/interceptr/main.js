@@ -20,11 +20,11 @@ wss.register('holo/identify', ({agentId}) => {
 	} catch (e) {
 		console.log("tried to re-add the same event. Its ok we forgive you")
 	}
-	return {Ok: true}
+	return { agentId }
 })
 
 wss.register('holo/agents/new', ({agentId}) => {
-	return {Ok: "you are now hosted!... really"}
+	return {success: true}
 })
 
 wss.register('holo/call', ({
@@ -49,7 +49,7 @@ wss.register('holo/call', ({
 })
 
 wss.register('holo/clientSignature', ({signature, requestId}) => {
-	return {Ok: true}
+	return {success: true}
 })
 
 
