@@ -26,7 +26,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-hClient.html">hClient</a><ul class='methods'><li data-type='method'><a href="module-hClient.html#.getCurrentAgentId">getCurrentAgentId</a></li><li data-type='method'><a href="module-hClient.html#.getDnaForUrl">getDnaForUrl</a></li><li data-type='method'><a href="module-hClient.html#.getHostsForUrl">getHostsForUrl</a></li><li data-type='method'><a href="module-hClient.html#.installLoginDialog">installLoginDialog</a></li><li data-type='method'><a href="module-hClient.html#.makeWebClient">makeWebClient</a></li><li data-type='method'><a href="module-hClient.html#.requestHosting">requestHosting</a></li><li data-type='method'><a href="module-hClient.html#.triggerLoginPrompt">triggerLoginPrompt</a></li></ul></li><li><a href="module-login.html">login</a><ul class='methods'><li data-type='method'><a href="module-login.html#~insertLoginHtml">insertLoginHtml</a></li><li data-type='method'><a href="module-login.html#~registerLoginCallbacks">registerLoginCallbacks</a></li><li data-type='method'><a href="module-login.html#~showLoginDialog">showLoginDialog</a></li></ul></li><li><a href="module-persistence.html">persistence</a></li></ul><h3>Global</h3><ul><li><a href="global.html#callSaltmine">callSaltmine</a></li><li><a href="global.html#generateNewReadwriteKeypair">generateNewReadwriteKeypair</a></li><li><a href="global.html#generateReadonlyKeypair">generateReadonlyKeypair</a></li><li><a href="global.html#getLocalEntropy">getLocalEntropy</a></li><li><a href="global.html#getRegisteredSalt">getRegisteredSalt</a></li><li><a href="global.html#getRemoteEntropy">getRemoteEntropy</a></li><li><a href="global.html#regenerateReadwriteKeypair">regenerateReadwriteKeypair</a></li><li><a href="global.html#registerSalt">registerSalt</a></li><li><a href="global.html#resolverUrl">resolverUrl</a></li><li><a href="global.html#XorUint8Array">XorUint8Array</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-hClient.html">hClient</a><ul class='methods'><li data-type='method'><a href="module-hClient.html#.getCurrentAgentId">getCurrentAgentId</a></li><li data-type='method'><a href="module-hClient.html#.getDnaForUrl">getDnaForUrl</a></li><li data-type='method'><a href="module-hClient.html#.getHostsForUrl">getHostsForUrl</a></li><li data-type='method'><a href="module-hClient.html#.installLoginDialog">installLoginDialog</a></li><li data-type='method'><a href="module-hClient.html#.makeWebClient">makeWebClient</a></li><li data-type='method'><a href="module-hClient.html#.requestHosting">requestHosting</a></li><li data-type='method'><a href="module-hClient.html#.startLoginProcess">startLoginProcess</a></li><li data-type='method'><a href="module-hClient.html#.triggerLoginPrompt">triggerLoginPrompt</a></li></ul></li><li><a href="module-login.html">login</a><ul class='methods'><li data-type='method'><a href="module-login.html#~insertLoginHtml">insertLoginHtml</a></li><li data-type='method'><a href="module-login.html#~registerLoginCallbacks">registerLoginCallbacks</a></li><li data-type='method'><a href="module-login.html#~showLoginDialog">showLoginDialog</a></li></ul></li><li><a href="module-persistence.html">persistence</a></li></ul><h3>Global</h3><ul><li><a href="global.html#callSaltmine">callSaltmine</a></li><li><a href="global.html#generateNewReadwriteKeypair">generateNewReadwriteKeypair</a></li><li><a href="global.html#generateReadonlyKeypair">generateReadonlyKeypair</a></li><li><a href="global.html#getLocalEntropy">getLocalEntropy</a></li><li><a href="global.html#getRegisteredSalt">getRegisteredSalt</a></li><li><a href="global.html#getRemoteEntropy">getRemoteEntropy</a></li><li><a href="global.html#regenerateReadwriteKeypair">regenerateReadwriteKeypair</a></li><li><a href="global.html#registerSalt">registerSalt</a></li><li><a href="global.html#resolverUrl">resolverUrl</a></li><li><a href="global.html#XorUint8Array">XorUint8Array</a></li></ul>
 </nav>
 
 <div id="main">
@@ -48,7 +48,7 @@
  *
  */
 
-const { Keypair, randomBytes, pwHash, fromBase64 } = require('./dpki-ultralite')
+const { Keypair, randomBytes, pwHash, fromBase64, toBase64 } = require('./dpki-ultralite')
 
 const saltmineUrl = '//saltmine.holohost.net'
 
@@ -70,6 +70,7 @@ const callSaltmine = (method, params) => {
   }
   return fetch(saltmineUrl, {
     method: method,
+    // mode: 'no-cors',
     cache: 'no-cache',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded' // Do not change or CORS will come and eat you alive (it does anyway!)
@@ -181,8 +182,16 @@ const generateNewReadwriteKeypair = async (
 ) => {
   const remoteEntropy = await remoteEntropyGenerator()
   const localEntropy = await localEntropyGenerator()
-  const salt = XorUint8Array(remoteEntropy, localEntropy)
-  const registeredSalt = await saltRegistrationCallback(email, salt)
+  const saltBytes = XorUint8Array(remoteEntropy, localEntropy)
+  const saltString = await toBase64(saltBytes)
+
+  let registeredSalt
+  try {
+    registeredSalt = await saltRegistrationCallback(email, saltString)
+  } catch (e) {
+    console.error('could not register salt. Proceeding unregistered', e)
+    registeredSalt = saltString
+  }
 
   console.log('password', password)
   console.log('registerSalt', registeredSalt)
@@ -234,7 +243,7 @@ module.exports = {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Mar 06 2019 15:24:27 GMT+1100 (AEDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Mar 12 2019 17:31:30 GMT+1100 (AEDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
