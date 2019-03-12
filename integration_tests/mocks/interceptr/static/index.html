@@ -24,7 +24,7 @@ window.hClient.makeWebClient(window.holochainclient).then(holoClient => {
     }
 
     document.getElementById('make-valid-call').onclick = function () {
-      call('instance', 'zome', 'ne0eds_sig_function')({ test: 'parameters' }).then(result => console.log(result))
+      call('instance', 'zome', 'needs_sig_function')({ test: 'parameters' }).then(result => console.log(result))
     }
 
     document.getElementById('trigger-unauthorized').onclick = function () {

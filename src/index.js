@@ -146,7 +146,7 @@ const hClient = (function () {
      */
   const getCurrentAgentId = async () => {
     if (keypair) {
-      const enc = new Encoding('hcs0')
+      const enc = await new Encoding('hcs0')
       return enc.encode(keypair._signPub)
     } else {
       return undefined
@@ -252,8 +252,13 @@ const hClient = (function () {
     console.log(response)
 
     // Check response for authentication error to see if login is required
-    if (response.Err && response.Err.code === 401) {
-      triggerLoginPrompt()
+    try {
+      const responseJson = JSON.parse(response)
+      if (responseJson.Err && responseJson.Err.code === 401) {
+        triggerLoginPrompt()
+      }
+    } catch (e) {
+      console.log(e)
     }
 
     // TODO: Sign the response and sent it back to the interceptor (check this is still required)
