@@ -1,3 +1,5 @@
+const fetchMock = require('fetch-mock')
+
 const hClient = require('../src/index.js')
 const keyManagement = require('../src/keyManagement.js')
 const resolver = require('../src/resolver.js')
@@ -33,7 +35,7 @@ describe('hClient: basic test', () => {
     const preCall = (callString, params) => ({ callString, params })
     const postCall = response => 'override response'
     const postConnect = ws => ws
-    const holoClient = hClient.makeWebClient(holochainClient, url, preCall, postCall, postConnect)
+    const holoClient = await hClient.makeWebClient(holochainClient, url, preCall, postCall, postConnect)
 
     // make a call with the overriden version
     let secondCallResult
@@ -91,8 +93,6 @@ describe('keyManagement', function () {
   })
 })
 
-const fetchMock = require('fetch-mock')
-
 describe('resolver', function () {
   before(() => {
     fetchMock.post('http://resolver.holohost.net', {
@@ -114,3 +114,5 @@ describe('resolver', function () {
     response.should.deep.equal(['some-node-address'])
   })
 })
+
+

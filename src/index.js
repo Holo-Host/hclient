@@ -1,4 +1,3 @@
-require('babel-polyfill')
 /**
  * The javascript library for making your web UI Holo enabled!
  *
@@ -47,9 +46,15 @@ const hClient = (function () {
   } = require('./login')
 
   const {
-    getDnaFromUrl,
-    getHostsFromUrl
+    getDnaForUrl,
+    getHostsForUrl
   } = require('./resolver')
+
+  const {
+    toBase64
+  } = require('./dpki-ultralite')
+
+  const { Encoding } = require('@holochain/hcid-js')
 
   /* ============================================
   =            Public API Functions            =
@@ -100,8 +105,8 @@ const hClient = (function () {
      * Takes a RPC-websockets object and returns it preCall=preCall, postCall=postCall, postConnect=postConnect.
      * Leave as default unless you know what you are doing.
      */
-  const makeWebClient = (holochainClient, url, preCall, postCall, postConnect) => {
-    url = url || getDefaultWebsocketUrl()
+  const makeWebClient = async (holochainClient, url, preCall, postCall, postConnect) => {
+    url = url || await getDefaultWebsocketUrl()
     preCall = preCall || _preCall
     postCall = postCall || _postCall
     postConnect = postConnect || _postConnect
@@ -128,9 +133,10 @@ const hClient = (function () {
      *
      * @return     {(Encoding|Object)}  The current agent identifier.
      */
-  const getCurrentAgentId = () => {
+  const getCurrentAgentId = async () => {
     if (keypair) {
-      return keypair.getId()
+      const enc = await new Encoding('hcs0')
+      return enc.encode(keypair._signPub)
     } else {
       return undefined
     }
@@ -143,7 +149,7 @@ const hClient = (function () {
    */
   const requestHosting = async () => {
     if (websocket) {
-      websocket.call('holo/agents/new', { agentId: getCurrentAgentId() })
+      await websocket.call('holo/agents/new', { agentId: await getCurrentAgentId(), happId: 'simple-app' })
     } else {
       throw Error('Cannot request registration with no websocket')
     }
@@ -156,9 +162,9 @@ const hClient = (function () {
    *
    * @return     {Object}  The default websocket url.
    */
-  const getDefaultWebsocketUrl = () => {
-    // for now just return the first host in the tranche
-    return getHostsFromUrl(window.location.hostname)[0]
+  const getDefaultWebsocketUrl = async () => {
+    const hosts = await getHostsForUrl(window.location.origin)
+    return 'ws://' + hosts[0]
   }
   // const getDefaultWebsocketUrl = () => document.getElementsByTagName('base')[0].href.replace('http', 'ws')
 
@@ -171,21 +177,22 @@ const hClient = (function () {
   const setKeypair = async (kp) => {
     keypair = kp
 
-    // set up the websocket to sign on request
-    const event = `agent/${getCurrentAgentId()}/sign`
-
     if (websocket) {
-      const response = await websocket.call('holo/identify', { agentId: getCurrentAgentId() })
-      if (response.Ok) {
-        websocket.subscribe(event)
-        websocket.on(event, async ({ entry, id }) => {
-          const signature = await keypair.sign(entry)
-          websocket.call('holo/clientSignature', {
-            signature,
-            requestId: id
-          })
+      const agentId = await getCurrentAgentId()
+      await websocket.call('holo/identify', { agentId })
+      // set up the websocket to sign on request
+      const event = `agent/${agentId}/sign`
+      console.log('subscribing to event', event)
+
+      websocket.subscribe(event)
+      websocket.on(event, async ({ entry, id }) => {
+        const signature = await keypair.sign(entry)
+        const signatureBase64 = await toBase64(signature)
+        websocket.call('holo/clientSignature', {
+          signature: signatureBase64,
+          requestId: id
         })
-      }
+      })
     } else {
       throw Error('Could not register callback as no valid websocket instance found')
     }
@@ -212,9 +219,9 @@ const hClient = (function () {
       const signature = await keypair.sign(JSON.stringify(call))
 
       const callParams = {
-        agentId: getCurrentAgentId(),
+        agentId: await getCurrentAgentId(),
         happId: 'TODO',
-        dnaHash: 'TODO',
+        dnaHash: 'Qm_DNA_Simple_App',
         function: callString,
         params,
         signature
@@ -231,15 +238,20 @@ const hClient = (function () {
      * @return     {string}  Updated response
      */
   const _postCall = (response) => {
-    response = JSON.parse(response)
+    console.log(response)
 
     // Check response for authentication error to see if login is required
-    if (response.Err && response.Err.code === 401) {
-      triggerLoginPrompt()
+    try {
+      const responseJson = JSON.parse(response)
+      if (responseJson.Err && responseJson.Err.code === 401) {
+        triggerLoginPrompt()
+      }
+    } catch (e) {
+      console.log(e)
     }
 
     // TODO: Sign the response and sent it back to the interceptor (check this is still required)
-    // TODO: Unpack the response to expose to the UI code (make it look like a regular holochain call)
+    // const responseSig = keypair.sign()
 
     return response
   }
@@ -266,8 +278,8 @@ const hClient = (function () {
     makeWebClient,
     getCurrentAgentId,
     requestHosting,
-    getDnaFromUrl,
-    getHostsFromUrl
+    getDnaForUrl,
+    getHostsForUrl
   }
 })()
 
