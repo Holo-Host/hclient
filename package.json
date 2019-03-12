@@ -1,6 +1,6 @@
 {
-  "name": "hclient",
-  "version": "0.1.0",
+  "name": "@holochain/hclient",
+  "version": "0.2.0",
   "description": "Client side lib injected by holo loader",
   "main": "./src/index.js",
   "scripts": {
@@ -11,8 +11,16 @@
     "prepare:integration_tests": "cd ./integration_tests && npm install",
     "integration_test": "cd ./integration_tests && npm run test",
     "unit_test": "mocha ./test/*.js -r chai/register-should",
-    "test": "npm run lint && npm run unit_test && npm run prepare:integration_tests && npm run integration_test"
+    "test": "npm run lint && npm run unit_test && npm run prepare:integration_tests && npm run integration_test",
+    "prepublishOnly": "npm test && npm run lint",
+    "prepare": "npm run build",
+    "preversion": "npm run lint",
+    "version": "git add -A src",
+    "postversion": "git push && git push --tags"
   },
+  "files": [
+    "./src/"
+  ],
   "author": "",
   "license": "GPL-3",
   "devDependencies": {
