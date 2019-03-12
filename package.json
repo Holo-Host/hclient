@@ -1,5 +1,5 @@
 {
-  "name": "@holo/hclient",
+  "name": "@holochain/hclient",
   "version": "0.2.0",
   "description": "Client side lib injected by holo loader",
   "main": "./src/index.js",
