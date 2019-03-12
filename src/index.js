@@ -106,6 +106,7 @@ const hClient = (function () {
      *
      * @param      {Object}    holochainClient A hc-web-client module to wrap
      * @param      {string}    [url]       The url to direct websocket calls. Defaults to the same location serving the UI but with the websocket protocol.
+     * @param      {string}    [dnaHash]   Override the hash of the DNA that would usually be provided by the loader. Mostly for testing purposes
      * @param      {Function}  [preCall]   The pre call funciton. Takes the callString and params and returns new callString and params.
      * Leave as default unless you know what you are doing.
      *
@@ -116,8 +117,9 @@ const hClient = (function () {
      * Takes a RPC-websockets object and returns it preCall=preCall, postCall=postCall, postConnect=postConnect.
      * Leave as default unless you know what you are doing.
      */
-  const makeWebClient = async (holochainClient, url, preCall, postCall, postConnect) => {
+  const makeWebClient = async (holochainClient, url, dnaHash, preCall, postCall, postConnect) => {
     url = url || await getDefaultWebsocketUrl()
+    dnaHash = dnaHash || await getDnaForUrl(window.location.origin)
     preCall = preCall || _preCall
     postCall = postCall || _postCall
     postConnect = postConnect || _postConnect
@@ -128,7 +130,7 @@ const hClient = (function () {
         return {
           call: (...callStringSegments) => async (params) => {
             const callString = callStringSegments.length === 1 ? callStringSegments[0] : callStringSegments.join('/')
-            const { callString: newCallString, params: newParams } = await preCall(callString, params)
+            const { callString: newCallString, params: newParams } = await preCall(dnaHash, callString, params)
             return call(newCallString)(newParams).then(postCall)
           },
           close,
@@ -216,7 +218,7 @@ const hClient = (function () {
      * @param      {Object}  params      The parameters
      * @return     {Object}  The updated callString and params passed to call
      */
-  const _preCall = async (callString, params) => {
+  const _preCall = async (dnaHash, callString, params) => {
     if (!keypair) {
       throw new Error('trying to call with no keys')
     } else {
@@ -232,7 +234,7 @@ const hClient = (function () {
       const callParams = {
         agentId: await getCurrentAgentId(),
         happId: 'TODO',
-        dnaHash: 'Qm_DNA_Simple_App',
+        dnaHash,
         function: callString,
         params,
         signature
