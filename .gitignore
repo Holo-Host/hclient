@@ -2,3 +2,4 @@ node_modules
 dist
 .cache
 integration_tests/mocks/interceptr/static/hclient*
+lib
