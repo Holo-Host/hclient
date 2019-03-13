@@ -1,6 +1,6 @@
 {
   "name": "@holo-host/hclient",
-  "version": "0.2.4",
+  "version": "0.2.3",
   "description": "Client side lib injected by holo loader",
   "main": "./lib/index.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "prepublishOnly": "npm test && npm run lint",
     "prepare": "npm run build && npm run build:lib",
     "preversion": "npm run lint",
-    "version": "git add -A src",
+    "version": "git add .",
     "postversion": "git push && git push --tags"
   },
   "files": [
