@@ -3,4 +3,4 @@ npm install
 
 cd ../../..
 npm run build
-cp ./dist/* ./integration_tests/mocks/interceptr/static/
+cp ./dist/*.js ./integration_tests/mocks/interceptr/static/hclient.browser.min.js
