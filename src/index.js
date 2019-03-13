@@ -125,8 +125,8 @@ const hClient = (function () {
     postConnect = postConnect || _postConnect
 
     return {
-      connect: () => holochainClient.connect(url).then(({ call, close, ws }) => {
-        ws = postConnect(ws)
+      connect: () => holochainClient.connect(url).then(async ({ call, close, ws }) => {
+        ws = await postConnect(ws)
         return {
           call: (...callStringSegments) => async (params) => {
             const callString = callStringSegments.length === 1 ? callStringSegments[0] : callStringSegments.join('/')
@@ -274,13 +274,12 @@ const hClient = (function () {
      *
      * @param      {Object}  ws      { rpc=websockets object }
      */
-  const _postConnect = (ws) => {
+  const _postConnect = async (ws) => {
     websocket = ws
 
     console.log('generating readonly keypair')
-    generateReadonlyKeypair().then(kp => {
-      setKeypair(kp)
-    })
+    const kp = await generateReadonlyKeypair()
+    await setKeypair(kp)
 
     return ws
   }
