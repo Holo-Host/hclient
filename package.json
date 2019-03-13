@@ -19,7 +19,7 @@
     "postversion": "git push && git push --tags"
   },
   "files": [
-    "./src/**/*"
+    "src"
   ],
   "author": "",
   "license": "GPL-3",
