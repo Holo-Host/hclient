@@ -105,24 +105,25 @@ const hClient = (function () {
      * @memberof module:hClient
      *
      * @param      {Object}    holochainClient A hc-web-client module to wrap
-     * @param      {string}    [url]       The url to direct websocket calls. Defaults to the same location serving the UI but with the websocket protocol.
-     * @param      {string}    [dnaHash]   Override the hash of the DNA that would usually be provided by the loader. Mostly for testing purposes
-     * @param      {Function}  [preCall]   The pre call funciton. Takes the callString and params and returns new callString and params.
+     * @param      {Object}    [optionals]           Non-required arguments
+     * @param      {string}    [optionals.url]       The url to direct websocket calls. Defaults to the same location serving the UI but with the websocket protocol.
+     * @param      {string}    [optionals.dnaHash]   Override the hash of the DNA that would usually be provided by the loader. Mostly for testing purposes
+     * @param      {Function}  [optionals.preCall]   The pre call funciton. Takes the callString and params and returns new callString and params.
      * Leave as default unless you know what you are doing.
      *
-     * @param      {Function}  [postCall]  The post call function. Takes the response and returns the new response.
+     * @param      {Function}  [optionals.postCall]  The post call function. Takes the response and returns the new response.
      * Leave as default unless you know what you are doing.
      *
-     * @param      {Function}  [postConnect]  The post connect function.
+     * @param      {Function}  [optionals.postConnect]  The post connect function.
      * Takes a RPC-websockets object and returns it preCall=preCall, postCall=postCall, postConnect=postConnect.
      * Leave as default unless you know what you are doing.
      */
-  const makeWebClient = async (holochainClient, url, dnaHash, preCall, postCall, postConnect) => {
-    url = url || await getDefaultWebsocketUrl()
-    dnaHash = dnaHash || await getDnaForUrl(window.location.origin)
-    preCall = preCall || _preCall
-    postCall = postCall || _postCall
-    postConnect = postConnect || _postConnect
+  const makeWebClient = async (holochainClient, happId, optionals = {}) => {
+    const url = optionals.url || await getDefaultWebsocketUrl()
+    const dnaHash = optionals.dnaHash || await getDnaForUrl(window.location.origin)
+    const preCall = optionals.preCall || _preCall
+    const postCall = optionals.postCall || _postCall
+    const postConnect = optionals.postConnect || _postConnect
 
     return {
       connect: () => holochainClient.connect(url).then(async ({ call, close, ws }) => {
