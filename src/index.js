@@ -230,6 +230,9 @@ const hClient = (function () {
     } else {
       console.log('call will be signed with', keypair)
 
+      // this expects old style zome calls from hc-web-client. Fix later.
+      const [instanceId, zome, funcName] = callString.split('/')
+      console.log(instanceId)
       const call = {
         method: callString,
         params
@@ -241,7 +244,8 @@ const hClient = (function () {
         agentId: await getCurrentAgentId(),
         happId: _happId,
         dnaHash,
-        function: callString,
+        zome,
+        function: funcName,
         params,
         signature
       }
