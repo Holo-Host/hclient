@@ -39,15 +39,19 @@ const insertLoginHtml = function () {
 
 /**
  * Shows the login dialog.
- *
- * @param      {function}  onSuccess callback. Takes email and password
- * @param      {function}  onFailure callback. Takes email and password
+ * @return     {Promise} returns a promise that resolves with the success/failure of the login
  */
-const showLoginDialog = function (onSuccess, onFailure) {
-  const modal = document.querySelector('.holo-dialog')
-  modal.onSuccess = onSuccess
-  modal.onFailure = onFailure
-  modal.showModal()
+const showLoginDialog = function () {
+  return new Promise((resolve, reject) => {
+    const modal = document.querySelector('.holo-dialog')
+    modal.onSuccess = (email, password) => {
+      resolve({ email, password })
+    }
+    modal.onFailure = (email, password) => {
+      reject(new Error('login did not validate'))
+    }
+    modal.showModal()
+  })
 }
 
 /**

@@ -12,12 +12,12 @@
 
 
   <script type="text/javascript" src="hc-web-client-0.1.2.browser.min.js"></script>
-  <script type="text/javascript" src="hclient-0.2.0.browser.min.js"></script>
+  <script type="text/javascript" src="hclient.browser.min.js"></script>
 
   <script type="text/javascript">
 
 window.hClient.installLoginDialog()
-window.hClient.makeWebClient(window.holochainclient).then(holoClient => {
+window.hClient.makeWebClient(window.holochainclient, 'happId').then(holoClient => {
   holoClient.connect().then(({ call }) => {
     document.getElementById('show-login').onclick = function () {
       window.hClient.showLoginDialog()

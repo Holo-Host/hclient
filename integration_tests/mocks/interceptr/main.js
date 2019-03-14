@@ -31,16 +31,17 @@ wss.register('holo/call', ({
   agentId, 
   happId, 
   dnaHash, 
+  zome,
   function: func, 
   params,
   signature,
 }) => {
 	switch(func) {
-		case "instance/zome/valid_function":
+		case "valid_function":
 			return JSON.stringify({Ok: "Some response"})
-		case "instance/zome/unauthorized_function":
+		case "unauthorized_function":
 			return JSON.stringify({Err: {code: 401}})
-		case "instance/zome/needs_sig_function":
+		case "needs_sig_function":
 			wss.emit(`agent/${agentId}/sign`, {entry: "fake_entry_string", id: callbackId++})
 			return JSON.stringify({Ok: true})
 		default:

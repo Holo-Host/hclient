@@ -1,10 +1,12 @@
 {
-  "name": "@holochain/hclient",
-  "version": "0.2.0",
+  "name": "@holo-host/hclient",
+  "version": "0.2.6",
   "description": "Client side lib injected by holo loader",
-  "main": "./src/index.js",
+  "main": "./lib/index.js",
   "scripts": {
+    "clean": "rm ./dist/*",
     "build": "parcel build ./src/index.js --global hClient -o ./dist/hclient-$npm_package_version.browser.min.js",
+    "build:lib": "mkdir -p ./lib && babel ./src --out-dir ./lib",
     "doc": "jsdoc -c jsdoc.json",
     "lint": "eslint ./src/",
     "lint:fix": "eslint ./src/ --fix",
@@ -13,19 +15,21 @@
     "unit_test": "mocha ./test/*.js -r chai/register-should",
     "test": "npm run lint && npm run unit_test && npm run prepare:integration_tests && npm run integration_test",
     "prepublishOnly": "npm test && npm run lint",
-    "prepare": "npm run build",
+    "prepare": "npm run build && npm run build:lib",
     "preversion": "npm run lint",
-    "version": "git add -A src",
+    "version": "git add .",
     "postversion": "git push && git push --tags"
   },
   "files": [
-    "./src/"
+    "lib"
   ],
   "author": "",
   "license": "GPL-3",
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.4",
     "@babel/plugin-transform-runtime": "^7.3.4",
+    "babel-plugin-static-fs": "^1.2.0",
     "chai": "^4.2.0",
     "cssnano": "^4.1.10",
     "docdash": "^1.0.3",
@@ -44,7 +48,7 @@
     "stylus": "^0.54.5"
   },
   "dependencies": {
-    "@holochain/hcid-js": "0.0.4",
+    "@holochain/hcid-js": "0.0.5",
     "dialog-polyfill": "^0.4.10",
     "jquery": "^3.3.1",
     "libsodium-wrappers-sumo": "^0.7.4",
