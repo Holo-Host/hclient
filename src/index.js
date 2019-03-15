@@ -32,6 +32,7 @@
 const hClient = (function () {
   let keypair
   let websocket
+  let _happId
 
   const {
     generateReadonlyKeypair,
@@ -77,10 +78,9 @@ const hClient = (function () {
    * This will overwrite the current key
    * @memberof module:hClient
    */
-  const triggerLoginPrompt = () => {
-    showLoginDialog((email, password) => {
-      startLoginProcess(email, password)
-    })
+  const triggerLoginPrompt = async () => {
+    const { email, password } = await showLoginDialog()
+    return startLoginProcess(email, password)
   }
 
   /**
@@ -90,12 +90,12 @@ const hClient = (function () {
    * @param      {string}                    password  The password
    * @memberof module:hClient
    */
-  const startLoginProcess = (email, password) => {
-    generateNewReadwriteKeypair(email, password).then(kp => {
-      console.log('Registered keypair is ', kp)
-      setKeypair(kp)
-      requestHosting()
-    })
+  const startLoginProcess = async (email, password) => {
+    const kp = await generateNewReadwriteKeypair(email, password)
+    console.log('Registered keypair is ', kp)
+    await setKeypair(kp)
+    await requestHosting()
+    return true
   }
 
   /**
@@ -105,28 +105,31 @@ const hClient = (function () {
      * @memberof module:hClient
      *
      * @param      {Object}    holochainClient A hc-web-client module to wrap
-     * @param      {string}    [url]       The url to direct websocket calls. Defaults to the same location serving the UI but with the websocket protocol.
-     * @param      {string}    [dnaHash]   Override the hash of the DNA that would usually be provided by the loader. Mostly for testing purposes
-     * @param      {Function}  [preCall]   The pre call funciton. Takes the callString and params and returns new callString and params.
+     * @param      {string}    {happId}              The hApp identifier that Holo has linked to this application
+     * @param      {Object}    [optionals]           Non-required arguments
+     * @param      {string}    [optionals.url]       The url to direct websocket calls. Defaults to the same location serving the UI but with the websocket protocol.
+     * @param      {string}    [optionals.dnaHash]   Override the hash of the DNA that would usually be provided by the loader. Mostly for testing purposes
+     * @param      {Function}  [optionals.preCall]   The pre call funciton. Takes the callString and params and returns new callString and params.
      * Leave as default unless you know what you are doing.
      *
-     * @param      {Function}  [postCall]  The post call function. Takes the response and returns the new response.
+     * @param      {Function}  [optionals.postCall]  The post call function. Takes the response and returns the new response.
      * Leave as default unless you know what you are doing.
      *
-     * @param      {Function}  [postConnect]  The post connect function.
+     * @param      {Function}  [optionals.postConnect]  The post connect function.
      * Takes a RPC-websockets object and returns it preCall=preCall, postCall=postCall, postConnect=postConnect.
      * Leave as default unless you know what you are doing.
      */
-  const makeWebClient = async (holochainClient, url, dnaHash, preCall, postCall, postConnect) => {
-    url = url || await getDefaultWebsocketUrl()
-    dnaHash = dnaHash || await getDnaForUrl(window.location.origin)
-    preCall = preCall || _preCall
-    postCall = postCall || _postCall
-    postConnect = postConnect || _postConnect
+  const makeWebClient = async (holochainClient, happId, optionals = {}) => {
+    _happId = happId
+    const url = optionals.url || await getDefaultWebsocketUrl()
+    const dnaHash = optionals.dnaHash || await getDnaForUrl(window.location.origin)
+    const preCall = optionals.preCall || _preCall
+    const postCall = optionals.postCall || _postCall
+    const postConnect = optionals.postConnect || _postConnect
 
     return {
-      connect: () => holochainClient.connect(url).then(({ call, close, ws }) => {
-        ws = postConnect(ws)
+      connect: () => holochainClient.connect(url).then(async ({ call, close, ws }) => {
+        ws = await postConnect(ws)
         return {
           call: (...callStringSegments) => async (params) => {
             const callString = callStringSegments.length === 1 ? callStringSegments[0] : callStringSegments.join('/')
@@ -162,7 +165,10 @@ const hClient = (function () {
    */
   const requestHosting = async () => {
     if (websocket) {
-      await websocket.call('holo/agents/new', { agentId: await getCurrentAgentId(), happId: 'simple-app' })
+      await websocket.call('holo/agents/new', {
+        agentId: await getCurrentAgentId(),
+        happId: _happId
+      })
     } else {
       throw Error('Cannot request registration with no websocket')
     }
@@ -224,6 +230,9 @@ const hClient = (function () {
     } else {
       console.log('call will be signed with', keypair)
 
+      // this expects old style zome calls from hc-web-client. Fix later.
+      const [instanceId, zome, funcName] = callString.split('/')
+      console.log(instanceId)
       const call = {
         method: callString,
         params
@@ -233,9 +242,10 @@ const hClient = (function () {
 
       const callParams = {
         agentId: await getCurrentAgentId(),
-        happId: 'TODO',
+        happId: _happId,
         dnaHash,
-        function: callString,
+        zome,
+        function: funcName,
         params,
         signature
       }
@@ -274,13 +284,12 @@ const hClient = (function () {
      *
      * @param      {Object}  ws      { rpc=websockets object }
      */
-  const _postConnect = (ws) => {
+  const _postConnect = async (ws) => {
     websocket = ws
 
     console.log('generating readonly keypair')
-    generateReadonlyKeypair().then(kp => {
-      setKeypair(kp)
-    })
+    const kp = await generateReadonlyKeypair()
+    await setKeypair(kp)
 
     return ws
   }

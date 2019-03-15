@@ -17,7 +17,7 @@
   <script type="text/javascript">
 
 window.hClient.installLoginDialog()
-window.hClient.makeWebClient(window.holochainclient).then(holoClient => {
+window.hClient.makeWebClient(window.holochainclient, 'happId').then(holoClient => {
   holoClient.connect().then(({ call }) => {
     document.getElementById('show-login').onclick = function () {
       window.hClient.showLoginDialog()
