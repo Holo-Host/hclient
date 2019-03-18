@@ -36,8 +36,8 @@ const hClient = (function () {
 
   const {
     generateReadonlyKeypair,
-    generateNewReadwriteKeypair
-    // regenerateReadwriteKeypair
+    generateNewReadwriteKeypair,
+    regenerateReadwriteKeypair
   } = require('./keyManagement')
 
   const {
@@ -79,8 +79,8 @@ const hClient = (function () {
    * @memberof module:hClient
    */
   const triggerLoginPrompt = async () => {
-    const { email, password } = await showLoginDialog()
-    return startLoginProcess(email, password)
+    const { email, password, newRegistration } = await showLoginDialog()
+    return startLoginProcess(email, password, newRegistration)
   }
 
   /**
@@ -88,11 +88,19 @@ const hClient = (function () {
    *
    * @param      {string}                    email     The email
    * @param      {string}                    password  The password
+   * @param      {boolean}                   newRegistration If true then register new salt with the saltservice otherwise try and regenerate existing keys
    * @memberof module:hClient
    */
-  const startLoginProcess = async (email, password) => {
-    const kp = await generateNewReadwriteKeypair(email, password)
-    console.log('Registered keypair is ', kp)
+  const startLoginProcess = async (email, password, newRegistration) => {
+    let kp
+    if (newRegistration) {
+      console.log('registering new email with salt service')
+      kp = await generateNewReadwriteKeypair(email, password)
+    } else {
+      console.log('restoring keys from existing registration')
+      kp = await regenerateReadwriteKeypair(email, password)
+    }
+    console.log('keypair is ', kp)
     await setKeypair(kp)
     await requestHosting()
     return true

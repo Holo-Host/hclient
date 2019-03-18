@@ -22,25 +22,61 @@
   background-color: rgba(0, 0, 0, 0.4);
 }
 
+/* Style the tab */
+.tab {
+  overflow: hidden;
+}
 
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: none;
+}
+
+/* Style the tab content */
+.tabcontent.activetab {
+  display: block;
+  border: none;
+}
 /*//////////////////////////////////////////////////////////////////
 
 
 /*---------------------------------------------*/
 .holo-dialog input {
-	outline: none;
-	border: none;
+  outline: none;
+  border: none;
 }
 
 /*---------------------------------------------*/
 .login100-form-btn {
-	outline: none !important;
-	border: none;
-	background: transparent;
+  outline: none !important;
+  border: none;
+  background: transparent;
 }
 
 .login100-form-btn {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 
@@ -72,6 +108,15 @@
   display: block;
   font-family: Open Sans;
   font-size: 30px;
+  color: #555555;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.login100-form-description {
+  display: block;
+  font-family: Open Sans;
+  font-size: 14px;
   color: #555555;
   line-height: 1.2;
   text-align: center;

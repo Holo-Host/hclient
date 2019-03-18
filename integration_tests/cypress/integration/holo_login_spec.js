@@ -54,7 +54,7 @@ describe('The integration test page', function () {
     cy.get('.holo-dialog').within(() => {
       cy.get("input[name='email']").type('test@test.com')
       cy.get("input[name='pass']").type('abc123')
-      cy.get('button').click()
+      cy.get('#signin-button').click()
     })
     cy.wait(500)
     cy.get('#make-valid-call').click()
