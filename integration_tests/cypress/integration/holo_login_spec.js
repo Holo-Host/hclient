@@ -66,7 +66,7 @@ describe('The integration test page', function () {
     cy.get('#trigger-unauthorized').click()
     cy.wait(500)
     cy.get('.holo-dialog').within(() => {
-      cy.get("#signup").click()
+      cy.get('#signup').click()
       cy.get("input[name='email']").type('test@test.com')
       cy.get("input[name='pass']").type('abc123')
       cy.get('#signin-button').click()
