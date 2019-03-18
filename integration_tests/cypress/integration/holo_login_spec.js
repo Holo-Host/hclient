@@ -46,7 +46,7 @@ describe('The integration test page', function () {
   })
 
   it('makes a call prior to authentication, authenticates, then calls again', () => {
-    cy.wait(1000)
+    cy.wait(2000)
     cy.get('#make-valid-call').click()
     cy.wait(500)
     cy.get('#trigger-unauthorized').click()
@@ -62,7 +62,7 @@ describe('The integration test page', function () {
   })
 
   it('Can select to sign-up and submit', () => {
-    cy.wait(1000)
+    cy.wait(2000)
     cy.get('#trigger-unauthorized').click()
     cy.wait(500)
     cy.get('.holo-dialog').within(() => {
