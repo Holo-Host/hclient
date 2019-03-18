@@ -46,12 +46,27 @@ describe('The integration test page', function () {
   })
 
   it('makes a call prior to authentication, authenticates, then calls again', () => {
-    cy.wait(2000)
+    cy.wait(1000)
     cy.get('#make-valid-call').click()
     cy.wait(500)
     cy.get('#trigger-unauthorized').click()
     cy.wait(500)
     cy.get('.holo-dialog').within(() => {
+      cy.get("input[name='email']").type('test@test.com')
+      cy.get("input[name='pass']").type('abc123')
+      cy.get('#signin-button').click()
+    })
+    cy.wait(500)
+    cy.get('#make-valid-call').click()
+    cy.wait(500)
+  })
+
+  it('Can select to sign-up and submit', () => {
+    cy.wait(1000)
+    cy.get('#trigger-unauthorized').click()
+    cy.wait(500)
+    cy.get('.holo-dialog').within(() => {
+      cy.get("#signup").click()
       cy.get("input[name='email']").type('test@test.com')
       cy.get("input[name='pass']").type('abc123')
       cy.get('#signin-button').click()
