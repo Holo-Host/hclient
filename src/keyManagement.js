@@ -150,9 +150,6 @@ const generateNewReadwriteKeypair = async (
     registeredSalt = saltString
   }
 
-  console.log('password', password)
-  console.log('registerSalt', registeredSalt)
-
   // Unsure why pwHash is configured to use 16 bytes of salt not 32. Ask about this
   const { hash } = await pwHash(password, registeredSalt.slice(0, 16))
   const keypair = await Keypair.newFromSeed(hash)

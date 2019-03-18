@@ -4,7 +4,7 @@
 
 const fs = require('fs')
 const $ = require('jquery') // try and remove jquery in a refactor soon
-
+var mode = 'signin'
 /**
  * Inserts the login page in to the current document HTML.
  * It will be invisible and should not alter current page until
@@ -45,7 +45,8 @@ const showLoginDialog = function () {
   return new Promise((resolve, reject) => {
     const modal = document.querySelector('.holo-dialog')
     modal.onSuccess = (email, password) => {
-      resolve({ email, password })
+      const newRegistration = mode === 'signup'
+      resolve({ email, password, newRegistration })
     }
     modal.onFailure = (email, password) => {
       reject(new Error('login did not validate'))
@@ -67,6 +68,15 @@ const registerLoginCallbacks = function () {
   /* ==================================================================
     [ Validate ] */
   var input = $('.holo-login-form .input100')
+
+  $('.tablinks').on('click', function (e) {
+    e.preventDefault()
+    mode = e.currentTarget.id
+    $('.tabcontent').removeClass('activetab')
+    $('.tablinks').removeClass('active')
+    $('#' + mode + '-info').addClass('activetab')
+    $('#' + mode).addClass('active')
+  })
 
   $('.holo-login-form').on('submit', function (e) {
     e.preventDefault()
