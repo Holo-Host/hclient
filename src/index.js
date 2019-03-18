@@ -86,9 +86,9 @@ const hClient = (function () {
   /**
    * Start the local key generation/regeneration process with an email and password
    *
-   * @param      {string}                    email     The email
-   * @param      {string}                    password  The password
-   * @param      {boolean}                   newRegistration If true then register new salt with the saltservice otherwise try and regenerate existing keys
+   * @param      {string}           email     The email
+   * @param      {string}           password  The password
+   * @param      {boolean}          newRegistration If true then register new salt with the saltservice otherwise try and regenerate existing keys
    * @memberof module:hClient
    */
   const startLoginProcess = async (email, password, newRegistration) => {
