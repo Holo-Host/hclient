@@ -134,19 +134,21 @@ const hClient = (function () {
    * Useful for testing or providing your own key management
    * @memberof module:hClient
    * 
-   * @param      {Object} keyManagemetCallbacks
-   * @param      {generateReadonlyKeypair} keyManagemetCallbacks.generateReadonlyKeypair
-   * @param      {generateNewReadwriteKeypair} keyManagemetCallbacks.generateNewReadwriteKeypair
-   * @param      {regenerateReadwriteKeypair} keyManagemetCallbacks.regenerateReadwriteKeypair
+   * @param      {Object} keyManagementCallbacks
+   * @param      {generateReadonlyKeypair} keyManagementCallbacks.generateReadonlyKeypair
+   * @param      {generateNewReadwriteKeypair} keyManagementCallbacks.generateNewReadwriteKeypair
+   * @param      {regenerateReadwriteKeypair} keyManagementCallbacks.regenerateReadwriteKeypair
    */
-  const setKeyManagementFunctions = ({
-    _generateReadonlyKeypair,
-    _generateNewReadwriteKeypair,
-    _regenerateReadwriteKeypair
-  }) => {
-    generateReadonlyKeypair = _generateReadonlyKeypair
-    generateNewReadwriteKeypair = _generateNewReadwriteKeypair
-    regenerateReadwriteKeypair = _regenerateReadwriteKeypair
+  const setKeyManagementFunctions = overrides => {
+    if (overrides.generateReadonlyKeypair) {
+      generateReadonlyKeypair = overrides.generateReadonlyKeypair
+    }
+    if (overrides.generateNewReadwriteKeypair) {
+      generateNewReadwriteKeypair = overrides.generateNewReadwriteKeypair
+    }
+    if (overrides.regenerateReadwriteKeypair) {
+      regenerateReadwriteKeypair = overrides.regenerateReadwriteKeypair
+    }
   }
 
   /**
@@ -254,7 +256,7 @@ const hClient = (function () {
       const event = `agent/${agentId}/sign`
       console.log('subscribing to event', event)
 
-      websocket.subscribe(event)
+      await websocket.subscribe(event)
       websocket.on(event, async ({ entry, id }) => {
         const signature = await keypair.sign(entry)
         const signatureBase64 = await toBase64(signature)
@@ -354,7 +356,9 @@ const hClient = (function () {
     requestHosting,
     getDnaForUrl,
     getHostsForUrl,
-    setKeyManagementFunctions
+    setKeyManagementFunctions,
+    keyManagement: require('./keyManagement'),
+    dpkiUltralite: require('./dpki-ultralite')
   }
 })()
 
