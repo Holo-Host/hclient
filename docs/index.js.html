@@ -26,7 +26,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-hClient.html">hClient</a><ul class='methods'><li data-type='method'><a href="module-hClient.html#.getCurrentAgentId">getCurrentAgentId</a></li><li data-type='method'><a href="module-hClient.html#.getDnaForUrl">getDnaForUrl</a></li><li data-type='method'><a href="module-hClient.html#.getHostsForUrl">getHostsForUrl</a></li><li data-type='method'><a href="module-hClient.html#.installLoginDialog">installLoginDialog</a></li><li data-type='method'><a href="module-hClient.html#.makeWebClient">makeWebClient</a></li><li data-type='method'><a href="module-hClient.html#.requestHosting">requestHosting</a></li><li data-type='method'><a href="module-hClient.html#.startLoginProcess">startLoginProcess</a></li><li data-type='method'><a href="module-hClient.html#.triggerLoginPrompt">triggerLoginPrompt</a></li></ul></li><li><a href="module-login.html">login</a><ul class='methods'><li data-type='method'><a href="module-login.html#~insertLoginHtml">insertLoginHtml</a></li><li data-type='method'><a href="module-login.html#~registerLoginCallbacks">registerLoginCallbacks</a></li><li data-type='method'><a href="module-login.html#~showLoginDialog">showLoginDialog</a></li></ul></li><li><a href="module-persistence.html">persistence</a></li></ul><h3>Global</h3><ul><li><a href="global.html#callSaltmine">callSaltmine</a></li><li><a href="global.html#generateNewReadwriteKeypair">generateNewReadwriteKeypair</a></li><li><a href="global.html#generateReadonlyKeypair">generateReadonlyKeypair</a></li><li><a href="global.html#getLocalEntropy">getLocalEntropy</a></li><li><a href="global.html#getRegisteredSalt">getRegisteredSalt</a></li><li><a href="global.html#getRemoteEntropy">getRemoteEntropy</a></li><li><a href="global.html#regenerateReadwriteKeypair">regenerateReadwriteKeypair</a></li><li><a href="global.html#registerSalt">registerSalt</a></li><li><a href="global.html#resolverUrl">resolverUrl</a></li><li><a href="global.html#XorUint8Array">XorUint8Array</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-hClient.html">hClient</a><ul class='methods'><li data-type='method'><a href="module-hClient.html#.getCurrentAgentId">getCurrentAgentId</a></li><li data-type='method'><a href="module-hClient.html#.getDnaForUrl">getDnaForUrl</a></li><li data-type='method'><a href="module-hClient.html#.getHostsForUrl">getHostsForUrl</a></li><li data-type='method'><a href="module-hClient.html#.installLoginDialog">installLoginDialog</a></li><li data-type='method'><a href="module-hClient.html#.makeWebClient">makeWebClient</a></li><li data-type='method'><a href="module-hClient.html#.requestHosting">requestHosting</a></li><li data-type='method'><a href="module-hClient.html#.setKeyManagementFunctions">setKeyManagementFunctions</a></li><li data-type='method'><a href="module-hClient.html#.startLoginProcess">startLoginProcess</a></li><li data-type='method'><a href="module-hClient.html#.triggerLoginPrompt">triggerLoginPrompt</a></li></ul></li><li><a href="module-login.html">login</a><ul class='methods'><li data-type='method'><a href="module-login.html#~insertLoginHtml">insertLoginHtml</a></li><li data-type='method'><a href="module-login.html#~registerLoginCallbacks">registerLoginCallbacks</a></li><li data-type='method'><a href="module-login.html#~showLoginDialog">showLoginDialog</a></li></ul></li><li><a href="module-persistence.html">persistence</a></li></ul><h3>Global</h3><ul><li><a href="global.html#callSaltmine">callSaltmine</a></li><li><a href="global.html#generateNewReadwriteKeypair">generateNewReadwriteKeypair</a></li><li><a href="global.html#generateReadonlyKeypair">generateReadonlyKeypair</a></li><li><a href="global.html#getLocalEntropy">getLocalEntropy</a></li><li><a href="global.html#getRegisteredSalt">getRegisteredSalt</a></li><li><a href="global.html#getRemoteEntropy">getRemoteEntropy</a></li><li><a href="global.html#regenerateReadwriteKeypair">regenerateReadwriteKeypair</a></li><li><a href="global.html#registerSalt">registerSalt</a></li><li><a href="global.html#resolverUrl">resolverUrl</a></li><li><a href="global.html#XorUint8Array">XorUint8Array</a></li></ul>
 </nav>
 
 <div id="main">
@@ -77,7 +77,7 @@ const hClient = (function () {
   let websocket
   let _happId
 
-  const {
+  let {
     generateReadonlyKeypair,
     generateNewReadwriteKeypair,
     regenerateReadwriteKeypair
@@ -147,6 +147,49 @@ const hClient = (function () {
     await setKeypair(kp)
     await requestHosting()
     return true
+  }
+
+  /**
+   * Callback to generate a readonly keypair
+   *
+   * @callback generateReadonlyKeypair
+   * @return {Promise} keypair object
+   */
+
+  /**
+   * Callback to generate a readwrite keypair
+   * given email and password
+   *
+   * @callback generateNewReadwriteKeypair
+   * @return {Promise} keypair object
+   */
+
+  /**
+   * Callback to regenerate an existing keypair
+   * given email and password
+   *
+   * @callback regenerateReadwriteKeypair
+   * @return {Promise} keypair object
+   */
+
+  /**
+   * Set overrides for the key generation function
+   * Useful for testing or providing your own key management
+   * @memberof module:hClient
+   * 
+   * @param      {Object} keyManagemetCallbacks
+   * @param      {generateReadonlyKeypair} keyManagemetCallbacks.generateReadonlyKeypair
+   * @param      {generateNewReadwriteKeypair} keyManagemetCallbacks.generateNewReadwriteKeypair
+   * @param      {regenerateReadwriteKeypair} keyManagemetCallbacks.regenerateReadwriteKeypair
+   */
+  const setKeyManagementFunctions = ({
+    _generateReadonlyKeypair,
+    _generateNewReadwriteKeypair,
+    _regenerateReadwriteKeypair
+  }) => {
+    generateReadonlyKeypair = _generateReadonlyKeypair
+    generateNewReadwriteKeypair = _generateNewReadwriteKeypair
+    regenerateReadwriteKeypair = _regenerateReadwriteKeypair
   }
 
   /**
@@ -353,7 +396,8 @@ const hClient = (function () {
     getCurrentAgentId,
     requestHosting,
     getDnaForUrl,
-    getHostsForUrl
+    getHostsForUrl,
+    setKeyManagementFunctions
   }
 })()
 
@@ -372,7 +416,7 @@ module.exports = hClient
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Mar 18 2019 15:08:05 GMT+1100 (AEDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 04 2019 12:09:04 GMT+1100 (AEDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
