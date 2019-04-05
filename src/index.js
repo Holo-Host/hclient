@@ -247,6 +247,7 @@ const hClient = (function () {
       }
 
       const signature = await keypair.sign(JSON.stringify(call))
+      const signatureBase64 = await toBase64(signature)
 
       const callParams = {
         agentId: await getCurrentAgentId(),
@@ -255,7 +256,7 @@ const hClient = (function () {
         zome,
         function: funcName,
         params,
-        signature
+        signature: signatureBase64
       }
 
       return { callString: 'holo/call', params: callParams }
