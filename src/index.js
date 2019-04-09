@@ -34,7 +34,7 @@ const hClient = (function () {
   let websocket
   let _happId
 
-  const {
+  let {
     generateReadonlyKeypair,
     generateNewReadwriteKeypair,
     regenerateReadwriteKeypair
@@ -104,6 +104,51 @@ const hClient = (function () {
     await setKeypair(kp)
     await requestHosting()
     return true
+  }
+
+  /**
+   * Callback to generate a readonly keypair
+   *
+   * @callback generateReadonlyKeypair
+   * @return {Promise} keypair object
+   */
+
+  /**
+   * Callback to generate a readwrite keypair
+   * given email and password
+   *
+   * @callback generateNewReadwriteKeypair
+   * @return {Promise} keypair object
+   */
+
+  /**
+   * Callback to regenerate an existing keypair
+   * given email and password
+   *
+   * @callback regenerateReadwriteKeypair
+   * @return {Promise} keypair object
+   */
+
+  /**
+   * Set overrides for the key generation function
+   * Useful for testing or providing your own key management
+   * @memberof module:hClient
+   *
+   * @param      {Object} keyManagementCallbacks
+   * @param      {generateReadonlyKeypair} keyManagementCallbacks.generateReadonlyKeypair
+   * @param      {generateNewReadwriteKeypair} keyManagementCallbacks.generateNewReadwriteKeypair
+   * @param      {regenerateReadwriteKeypair} keyManagementCallbacks.regenerateReadwriteKeypair
+   */
+  const setKeyManagementFunctions = overrides => {
+    if (overrides.generateReadonlyKeypair) {
+      generateReadonlyKeypair = overrides.generateReadonlyKeypair
+    }
+    if (overrides.generateNewReadwriteKeypair) {
+      generateNewReadwriteKeypair = overrides.generateNewReadwriteKeypair
+    }
+    if (overrides.regenerateReadwriteKeypair) {
+      regenerateReadwriteKeypair = overrides.regenerateReadwriteKeypair
+    }
   }
 
   /**
@@ -216,7 +261,7 @@ const hClient = (function () {
       const event = `agent/${agentId}/sign`
       console.log('subscribing to event', event)
 
-      websocket.subscribe(event)
+      await websocket.subscribe(event)
       websocket.on(event, async ({ entry, id }) => {
         const signature = await keypair.sign(entry)
         const signatureBase64 = await toBase64(signature)
@@ -316,7 +361,10 @@ const hClient = (function () {
     getCurrentAgentId,
     requestHosting,
     getDnaForUrl,
-    getHostsForUrl
+    getHostsForUrl,
+    setKeyManagementFunctions,
+    keyManagement: require('./keyManagement'),
+    dpkiUltralite: require('./dpki-ultralite')
   }
 })()
 
