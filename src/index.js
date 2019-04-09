@@ -145,7 +145,7 @@ const hClient = (function () {
             return call(newCallString)(newParams).then(postCall)
           },
           callZome: (_instanceId, zome, func) => async (params) => {
-            const callString = [instanceId, zome, func].join('/')
+            const callString = [_instanceId, zome, func].join('/')
             const { callString: newCallString, params: newParams } = await preCall(dnaHash, callString, params)
             return call(newCallString)(newParams).then(postCall)
           },
