@@ -1,8 +1,8 @@
 const fetchMock = require('fetch-mock')
 
-const hClient = require('../src/index.js')
-const keyManagement = require('../src/keyManagement.js')
-const resolver = require('../src/resolver.js')
+const hClient = require('../lib/index.js')
+const keyManagement = require('../lib/keyManagement.js')
+const resolver = require('../lib/resolver.js')
 
 describe('hClient: basic test', () => {
   it('should be able to override window.holochainClient', async () => {

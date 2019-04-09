@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "src",
+    "outDir": "lib",
+    "allowJs": true,
+
+    "target": "es5",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "sourceMap": false,
+    "esModuleInterop": true,
+
+    "downlevelIteration": true,
+    "lib": ["es6", "dom"],
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "lib",
+    "dist",
+    "src/__tests__"
+  ]
+}
