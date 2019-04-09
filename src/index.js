@@ -133,7 +133,7 @@ const hClient = (function () {
    * Set overrides for the key generation function
    * Useful for testing or providing your own key management
    * @memberof module:hClient
-   * 
+   *
    * @param      {Object} keyManagementCallbacks
    * @param      {generateReadonlyKeypair} keyManagementCallbacks.generateReadonlyKeypair
    * @param      {generateNewReadwriteKeypair} keyManagementCallbacks.generateNewReadwriteKeypair
