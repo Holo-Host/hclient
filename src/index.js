@@ -189,6 +189,11 @@ const hClient = (function () {
             const { callString: newCallString, params: newParams } = await preCall(dnaHash, callString, params)
             return call(newCallString)(newParams).then(postCall)
           },
+          callZome: (_instanceId, zome, func) => async (params) => {
+            const callString = [_instanceId, zome, func].join('/')
+            const { callString: newCallString, params: newParams } = await preCall(dnaHash, callString, params)
+            return call(newCallString)(newParams).then(postCall)
+          },
           close,
           ws
         }
@@ -292,6 +297,7 @@ const hClient = (function () {
       }
 
       const signature = await keypair.sign(JSON.stringify(call))
+      const signatureBase64 = await toBase64(signature)
 
       const callParams = {
         agentId: await getCurrentAgentId(),
@@ -300,7 +306,7 @@ const hClient = (function () {
         zome,
         function: funcName,
         params,
-        signature
+        signature: signatureBase64
       }
 
       return { callString: 'holo/call', params: callParams }
