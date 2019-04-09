@@ -48,6 +48,16 @@ describe('hClient: basic test', () => {
         secondCallResult.should.equal('override response')
       })
     })
+
+    // test callZome also works
+    let thirdCallResult
+    await holoClient.connect().then(({ callZome }) => {
+      callZome('instance', 'zome', 'func')('params1').then(result => {
+        console.log(result)
+        thirdCallResult = result
+        thirdCallResult.should.equal('override response')
+      })
+    })
   })
 })
 
@@ -116,5 +126,3 @@ describe('resolver', function () {
     response.should.deep.equal(['some-node-address'])
   })
 })
-
-
