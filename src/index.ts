@@ -44,7 +44,7 @@ const hClient = (function () {
   let websocket: WebsocketClient
   let _happId: string
 
-  const {
+  let {
     generateReadonlyKeypair,
     generateNewReadwriteKeypair,
     regenerateReadwriteKeypair
@@ -163,6 +163,28 @@ const hClient = (function () {
           ws
         }
       })
+    }
+  }
+
+  /**
+   * Set overrides for the key generation function
+   * Useful for testing or providing your own key management
+   * @memberof module:hClient
+   *
+   * @param      {Object} keyManagementCallbacks
+   * @param      {generateReadonlyKeypair} keyManagementCallbacks.generateReadonlyKeypair
+   * @param      {generateNewReadwriteKeypair} keyManagementCallbacks.generateNewReadwriteKeypair
+   * @param      {regenerateReadwriteKeypair} keyManagementCallbacks.regenerateReadwriteKeypair
+   */
+  const setKeyManagementFunctions = (overrides: any) => {
+    if (overrides.generateReadonlyKeypair) {
+      generateReadonlyKeypair = overrides.generateReadonlyKeypair
+    }
+    if (overrides.generateNewReadwriteKeypair) {
+      generateNewReadwriteKeypair = overrides.generateNewReadwriteKeypair
+    }
+    if (overrides.regenerateReadwriteKeypair) {
+      regenerateReadwriteKeypair = overrides.regenerateReadwriteKeypair
     }
   }
 
