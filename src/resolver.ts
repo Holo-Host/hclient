@@ -8,7 +8,7 @@
  */
 const resolverUrl = 'http://resolver.holohost.net/'
 
-const callResolver = (params) => {
+const callResolver = (params: any) => {
   const body = Object.keys(params).map((key) => {
     return encodeURIComponent(key) + '=' + encodeURIComponent(params[key])
   }).join('&')
@@ -28,7 +28,7 @@ const callResolver = (params) => {
  * This will overwrite the current key
  * @memberof module:hClient
  */
-const getHostsForUrl = (url) => {
+const getHostsForUrl = (url: string) => {
   return callResolver({ url })
     .then(r => r.json())
     .then(json => json.hosts)
@@ -39,7 +39,7 @@ const getHostsForUrl = (url) => {
  * This will overwrite the current key
  * @memberof module:hClient
  */
-const getDnaForUrl = (url) => {
+const getDnaForUrl = (url: string) => {
   return callResolver({ url })
     .then(r => r.json())
     .then(json => json.dna)

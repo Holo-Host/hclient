@@ -1,11 +1,5 @@
 /* eslint-disable */
 
-const _sodium = require('libsodium-wrappers-sumo')
-const msgpack = require('msgpack-lite')
-const util = require('./util')
-
-const NONCEBYTES = 24
-
 /**
  * Represents two asymmetric cryptography keypairs
  * - a signing keypair
@@ -15,7 +9,21 @@ const NONCEBYTES = 24
  *
  * can optionally be initialized without the private halves of the pairs
  */
-class Keypair {
+
+import { SALTBYTES, NONCEBYTES } from './index'
+
+const _sodium = require('libsodium-wrappers-sumo')
+const msgpack = require('msgpack-lite')
+const util = require('./util')
+
+export class Keypair {
+
+  _pubkeys: string
+  _signPub: Uint8Array
+  _encPub: Uint8Array
+  _signPriv: Uint8Array
+  _encPriv: Uint8Array
+
   /**
    * keypair constructor (you probably want one of the static functions above)
    * @param {object} opt
@@ -23,7 +31,13 @@ class Keypair {
    * @param {Buffer} [opt.signPriv] - private signature key
    * @param {Buffer} [opt.encPriv] - private encryption key
    */
-  constructor (opt) {
+  constructor (opt: {
+    pubkeys: string,
+    signPriv: Uint8Array,
+    encPriv: Uint8Array,
+    signPub: Uint8Array,
+    encPub: Uint8Array
+  }) {
     if (
       typeof opt !== 'object' ||
       typeof opt.pubkeys !== 'string'
@@ -65,9 +79,9 @@ class Keypair {
    * derive the pairs from a 32 byte seed buffer
    * @param {Buffer} seed - the seed buffer
    */
-  static newFromSeed (seed) {
+  static newFromSeed (seed: Buffer) {
     return new Promise((resolve, reject) => {
-      _sodium.ready.then((_) => {
+      _sodium.ready.then((_: any) => {
         const {
           publicKey: signPub,
           privateKey: signPriv
@@ -76,7 +90,7 @@ class Keypair {
           publicKey: encPub,
           privateKey: encPriv
         } = _sodium.crypto_kx_seed_keypair(seed)
-        util.encodeId(signPub, encPub).then(pubkeys => {
+        util.encodeId(signPub, encPub).then((pubkeys: string) => {
           resolve(new Keypair({
             pubkeys,
             signPub,
@@ -102,12 +116,12 @@ class Keypair {
    * sign some arbitrary data with the signing private key
    * @param {Buffer} data - the data to sign
    */
-  sign (data) {
+  sign (data: Buffer) {
     if (!this._signPriv) {
       throw new Error('no signPriv - cannot sign data')
     }
     return new Promise((resolve, reject) => {
-      _sodium.ready.then((_) => {
+      _sodium.ready.then((_: any) => {
         resolve(_sodium.crypto_sign_detached(data, this._signPriv))
         reject('failure reason') // rejected
       })
@@ -119,9 +133,9 @@ class Keypair {
    * @param {Buffer} signature
    * @param {Buffer} data
    */
-  verify (signature, data) {
+  verify (signature: Buffer, data: Buffer) {
     return new Promise((resolve, reject) => {
-      util.verify(signature, data, this._pubkeys).then((_) => {
+      util.verify(signature, data, this._pubkeys).then((_: any) => {
         resolve(_)
         reject('failure reason') // rejected
       })
@@ -133,29 +147,29 @@ class Keypair {
    * @param {Buffer} data - the data to encrypt
    * @return {Buffer}
    */
-  encrypt (recipientIds, data, adata) {
-    var _this = this
+  encrypt (recipientIds: Array<string>, data: Buffer, adata: Buffer) {
+    const _this = this
     data = Buffer.from(data)
 
     return new Promise(function (resolve, reject) {
-      _sodium.ready.then(function (_) {
-        util.randomBytes(32).then(function (symSecret) {
-          var out = []
-          var flag = false
+      _sodium.ready.then(function (_: any) {
+        util.randomBytes(32).then(function (symSecret: any) {
+          let out: Array<any> = []
+          let flag = false
           return new Promise(function (resolve, reject) {
-            var _loop = function _loop (i, p) {
-              util.decodeId(recipientIds[i]).then(function (key) {
+            const _loop = function _loop (i: any, p: any) {
+              util.decodeId(recipientIds[i]).then(function (key: any) {
                 return key.encPub
-              }).then(function (recipPub) {
+              }).then(function (recipPub: any) {
                 // console.log("REC:: ",recipPub);
-                var _sodium$crypto_kx_ser = _sodium.crypto_kx_server_session_keys(_this._encPub, _this._encPriv, recipPub)
-                var tx = _sodium$crypto_kx_ser.sharedTx
+                const sodiumCryptoTxSer = _sodium.crypto_kx_server_session_keys(_this._encPub, _this._encPriv, recipPub)
+                const tx = sodiumCryptoTxSer.sharedTx
 
-                var nonce = _sodium.randombytes_buf(NONCEBYTES)
-                var cipher = _sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(symSecret, adata || null, null, nonce, tx)
+                const nonce = _sodium.randombytes_buf(NONCEBYTES)
+                const cipher = _sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(symSecret, adata || null, null, nonce, tx)
                 out.push(nonce)
                 out.push(cipher)
-                if (i == recipientIds.length - 1) {
+                if (i === recipientIds.length - 1) {
                   flag = true
                   resolve({
                     out: out,
@@ -165,16 +179,16 @@ class Keypair {
               })
               // XXX lru cache these so we don't have to re-gen every time?
             }
-
-            for (var i = 0, p = Promise.resolve(); i < recipientIds.length; i++) {
+            let p = Promise.resolve()
+            for (let i = 0; i < recipientIds.length; i++) {
               _loop(i, p)
             }
           })
-        }).then(function (r) {
-          var out = r.out
-          var symSecret = r.symSecret
-          var nonce = _sodium.randombytes_buf(NONCEBYTES)
-          var cipher = _sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(data, adata || null, null, nonce, symSecret)
+        }).then(function (r: any) {
+          const out = r.out
+          const symSecret = r.symSecret
+          const nonce = _sodium.randombytes_buf(NONCEBYTES)
+          const cipher = _sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(data, adata || null, null, nonce, symSecret)
           out.push(nonce)
           out.push(cipher)
           resolve(msgpack.encode(out))
@@ -190,11 +204,11 @@ class Keypair {
    * @param {Buffer} cipher - the encrypted data
    * @return {Buffer} - the decrypted data
    */
-  decrypt (sId, cipher, adata) {
+  decrypt (sId: string, cipher: Buffer, adata: Buffer) {
     cipher = msgpack.decode(cipher)
     return new Promise((resolve, reject) => {
-      _sodium.ready.then((_) => {
-        util.decodeId(sId).then(id => {
+      _sodium.ready.then((_: any) => {
+        util.decodeId(sId).then((id: any) => {
           // we will call the encryptor the "server"
           // and the recipient (us) the "client"
           // XXX cache?
@@ -229,7 +243,7 @@ class Keypair {
    * @param {string} passphrase - the encryption passphrase
    * @param {string} hint - additional info / description for the bundle
    */
-  getBundle (passphrase, hint) {
+  getBundle (passphrase: string, hint: string) {
     if (typeof hint !== 'string') {
       throw new Error('hint must be a string')
     }
@@ -238,7 +252,7 @@ class Keypair {
       util.pwEnc(msgpack.encode([
         this._signPub, this._encPub,
         this._signPriv, this._encPriv
-      ]), passphrase).then((data) => {
+      ]), passphrase).then((data: any) => {
         resolve({
           type: 'hcKeypair',
           hint,
@@ -254,11 +268,11 @@ class Keypair {
    * @param {object} bundle - persistence info
    * @param {string} passphrase - decryption passphrase
    */
-  static fromBundle (bundle, passphrase) {
+  static fromBundle (bundle: any, passphrase: string) {
     return new Promise((resolve, reject) => {
-      util.pwDec(bundle.data, passphrase).then((encoded_bundle) => {
-        bundle = msgpack.decode(encoded_bundle)
-        util.encodeId(bundle[0], bundle[1]).then(pubkeys => {
+      util.pwDec(bundle.data, passphrase).then((encodedBundle: any) => {
+        bundle = msgpack.decode(encodedBundle)
+        util.encodeId(bundle[0], bundle[1]).then((pubkeys: any) => {
           resolve(new Keypair({
             pubkeys,
             signPub: bundle[0],

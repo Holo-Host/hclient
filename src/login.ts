@@ -1,10 +1,10 @@
 /**
- @module login
-*/
+ * @module login
+ */
 
 const fs = require('fs')
 const $ = require('jquery') // try and remove jquery in a refactor soon
-var mode = 'signin'
+let mode = 'signin'
 /**
  * Inserts the login page in to the current document HTML.
  * It will be invisible and should not alter current page until
@@ -16,15 +16,15 @@ const insertLoginHtml = function () {
   let cssMain = fs.readFileSync(__dirname + '/login/css/main.css')
   let cssUtil = fs.readFileSync(__dirname + '/login/css/main.css')
 
-  var template = document.createElement('template')
+  let template = document.createElement('template')
   template.id = 'login-template'
   template.innerHTML = html
 
   document.body.appendChild(template)
 
   // this is the node of the object you wanted
-  var documentFragment = template.content
-  var templateClone = documentFragment.cloneNode(true)
+  let documentFragment = template.content
+  let templateClone = documentFragment.cloneNode(true)
 
   document.body.appendChild(templateClone) // this empty root now has your template
 
@@ -43,12 +43,12 @@ const insertLoginHtml = function () {
  */
 const showLoginDialog = function () {
   return new Promise((resolve, reject) => {
-    const modal = document.querySelector('.holo-dialog')
-    modal.onSuccess = (email, password) => {
+    const modal: any = document.querySelector('.holo-dialog')
+    modal.onSuccess = (email: string, password: string) => {
       const newRegistration = mode === 'signup'
       resolve({ email, password, newRegistration })
     }
-    modal.onFailure = (email, password) => {
+    modal.onFailure = (email: string, password: string) => {
       reject(new Error('login did not validate'))
     }
     modal.showModal()
@@ -62,14 +62,14 @@ const showLoginDialog = function () {
 const registerLoginCallbacks = function () {
   const dialogPolyfill = require('dialog-polyfill')
 
-  const modal = document.querySelector('.holo-dialog')
+  const modal: any = document.querySelector('.holo-dialog')
   dialogPolyfill.registerDialog(modal)
 
   /* ==================================================================
     [ Validate ] */
-  var input = $('.holo-login-form .input100')
+  let input = $('.holo-login-form .input100')
 
-  $('.tablinks').on('click', function (e) {
+  $('.tablinks').on('click', function (e: any) {
     e.preventDefault()
     mode = e.currentTarget.id
     $('.tabcontent').removeClass('activetab')
@@ -78,12 +78,12 @@ const registerLoginCallbacks = function () {
     $('#' + mode).addClass('active')
   })
 
-  $('.holo-login-form').on('submit', function (e) {
+  $('.holo-login-form').on('submit', function (e: any) {
     e.preventDefault()
 
-    var check = true
+    let check = true
 
-    for (var i = 0; i < input.length; i++) {
+    for (let i = 0; i < input.length; i++) {
       if (validate(input[i]) === false) {
         showValidate(input[i])
         check = false
@@ -112,7 +112,7 @@ const registerLoginCallbacks = function () {
     })
   })
 
-  function validate (input) {
+  function validate (input: any) {
     if ($(input).attr('type') === 'email' || $(input).attr('name') === 'email') {
       if ($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
         return false
@@ -124,14 +124,14 @@ const registerLoginCallbacks = function () {
     }
   }
 
-  function showValidate (input) {
-    var thisAlert = $(input).parent()
+  function showValidate (input: any) {
+    let thisAlert = $(input).parent()
 
     $(thisAlert).addClass('alert-validate')
   }
 
-  function hideValidate (input) {
-    var thisAlert = $(input).parent()
+  function hideValidate (input: any) {
+    let thisAlert = $(input).parent()
 
     $(thisAlert).removeClass('alert-validate')
   }

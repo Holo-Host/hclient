@@ -16,7 +16,7 @@ const saltmineUrl = '//saltmine.holohost.net'
  * @param      {Object}      params  Parameter to pass in the body
  * @return     {Promise}     Promise that resolves to the reponse
  */
-const callSaltmine = (method, params) => {
+const callSaltmine = (method: string, params?: any): Promise<Response> => {
   let body
   if (method === 'GET') {
     body = undefined
@@ -45,6 +45,7 @@ const getRemoteEntropy = () => {
   return callSaltmine('GET')
     .then(r => r.text())
     .then(fromBase64)
+      // @ts-ignore
     .then((buffer) => new Uint8Array(buffer).slice(0, 32))
 }
 
@@ -55,10 +56,11 @@ const getRemoteEntropy = () => {
  * @param      {Uint8Array}  salt    The salt
  * @return     {Promise}     If successful will resolve to the same salt again
  */
-const registerSalt = (email, salt) => {
+const registerSalt = (email: string, salt: Uint8Array) => {
   return callSaltmine('POST', { email, salt })
     .then(r => r.text())
     .then(fromBase64)
+      // @ts-ignore
     .then((buffer) => new Uint8Array(buffer).slice(0, 32))
 }
 
@@ -68,10 +70,11 @@ const registerSalt = (email, salt) => {
  * @param      {string}      email   The email
  * @return     {Promise}  If successful will resolve to previously registered salt
  */
-const getRegisteredSalt = (email) => {
+const getRegisteredSalt = (email: string) => {
   return callSaltmine('POST', { email })
     .then(r => r.text())
     .then(fromBase64)
+      // @ts-ignore
     .then((buffer) => new Uint8Array(buffer).slice(0, 32))
 }
 
@@ -82,7 +85,7 @@ const getRegisteredSalt = (email) => {
  */
 const getLocalEntropy = async () => {
   if (typeof window !== 'undefined' && window.crypto) {
-    var array = new Uint8Array(32)
+    let array = new Uint8Array(32)
     window.crypto.getRandomValues(array)
     return array
   } else {
@@ -95,7 +98,7 @@ const getLocalEntropy = async () => {
  * XOR two Uint8 arrays together.
  * Surely there is a better way to do this? This is the best I could find
  */
-const XorUint8Array = (a, b) => {
+const XorUint8Array = (a: Uint8Array, b: Uint8Array) => {
   let r = new Uint8Array(a.length)
   for (let i = 0; i < a.length; i++) {
     r[i] = a[i] ^ b[i]
@@ -131,8 +134,8 @@ const generateReadonlyKeypair = async (
  * @param      {function} saltRegistrationCallback
  */
 const generateNewReadwriteKeypair = async (
-  email,
-  password,
+  email: string,
+  password: string,
   remoteEntropyGenerator = getRemoteEntropy,
   localEntropyGenerator = getLocalEntropy,
   saltRegistrationCallback = registerSalt
@@ -166,8 +169,8 @@ const generateNewReadwriteKeypair = async (
  * @return     {function}  The generated keypair object
  */
 const regenerateReadwriteKeypair = async (
-  email,
-  password,
+  email: string,
+  password: string,
   getRegisteredSaltCallback = getRegisteredSalt
 ) => {
   const registeredSalt = await getRegisteredSaltCallback(email)
