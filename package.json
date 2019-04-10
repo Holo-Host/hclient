@@ -7,7 +7,7 @@
     "clean": "rm -f ./dist/*",
     "build": "parcel build ./src/index.ts --global hClient -o ./dist/hclient-$npm_package_version.browser.min.js",
     "build:lib": "mkdir -p ./lib && tsc",
-    "doc": "jsdoc -c jsdoc.json",
+    "doc": "typedoc --out ./docs/ ./src/",
     "lint": "tslint -p ./tslint.json",
     "lint:fix": "eslint ./src/ --fix",
     "prepare:integration_tests": "cd ./integration_tests && npm install",
@@ -35,7 +35,6 @@
     "cssnano": "^4.1.10",
     "docdash": "^1.0.3",
     "fetch-mock": "^7.3.1",
-    "jsdoc": "^3.5.5",
     "mocha": "^6.0.2",
     "node-fetch": "^2.3.0",
     "parcel": "^1.11.0",
@@ -44,6 +43,7 @@
     "tsc": "^1.20150623.0",
     "tslint": "^5.15.0",
     "tslint-config-standard": "^8.0.1",
+    "typedoc": "^0.14.2",
     "typescript": "^3.4.2"
   },
   "dependencies": {
