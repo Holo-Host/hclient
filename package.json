@@ -40,7 +40,6 @@
     "parcel": "^1.11.0",
     "parcel-plugin-inliner": "^1.0.4",
     "stylus": "^0.54.5",
-    "tsc": "^1.20150623.0",
     "tslint": "^5.15.0",
     "tslint-config-standard": "^8.0.1",
     "typedoc": "^0.14.2",
