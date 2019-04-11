@@ -290,6 +290,7 @@ const hClient = (function () {
         agentId: await getCurrentAgentId(),
         happId: _happId,
         dnaHash,
+        instanceId,
         zome,
         function: funcName,
         params,
