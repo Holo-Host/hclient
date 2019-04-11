@@ -2,3 +2,9 @@ language: node_js
 node_js:
   - "8"
 cache: npm
+
+install:
+  - npm uninstall typescript --no-save
+  - npm uninstall tslint --no-save
+  - npm install
+  

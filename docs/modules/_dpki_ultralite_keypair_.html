@@ -3,17 +3,17 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>@holo-host/hclient</title>
+	<title>&quot;dpki-ultralite/keypair&quot; | @holo-host/hclient</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
+	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
 <body>
 <header>
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">@holo-host/hclient</a>
+					<a href="../index.html" class="title">@holo-host/hclient</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -53,97 +53,120 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="globals.html">Globals</a>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="_dpki_ultralite_keypair_.html">&quot;dpki-ultralite/keypair&quot;</a>
 				</li>
 			</ul>
-			<h1> @holo-host/hclient</h1>
+			<h1>External module &quot;dpki-ultralite/keypair&quot;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<h1 id="hclient">hClient</h1>
-				<p><a href="https://travis-ci.org/Holo-Host/hClient.js"><img src="https://travis-ci.org/Holo-Host/hClient.js.png" alt="Build Status"></a></p>
-				<p>For API documentation for the master branch visit <a href="https://holo-host.github.io/hClient.js/module-hClient.html">https://holo-host.github.io/hClient.js/module-hClient.html</a></p>
-				<p>hClient is the client side library developers must import for their web UI to be Holo enabled. It includes the following functionality:</p>
-				<pre><code>- Key management <span class="hljs-keyword">and</span> generation
-    + Generating temporary readonly keys <span class="hljs-keyword">for</span> browsing
-    + Detecting when authorization is required <span class="hljs-keyword">and</span> prompting the<span class="hljs-built_in"> user </span><span class="hljs-keyword">to</span> signup/login <span class="hljs-keyword">to</span> generate read/write keys
-- Signing calls <span class="hljs-keyword">and</span> responses
-- setting up a websocket<span class="hljs-built_in"> connection </span><span class="hljs-keyword">to</span> the interceptor <span class="hljs-keyword">to</span> sign commits on request (the signing wormhole)
--  Wrapping <span class="hljs-keyword">and</span> unwrapping calls <span class="hljs-keyword">to</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">from</span> the interceptor such that they look like regular holochain calls</code></pre><p>hClient is designed so that UI developers do not need to make any extra considerations when developing for Holo or Holochain. A holochain app that uses hc-web-client can be converted to holo by calling</p>
-				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> hClient = <span class="hljs-built_in">require</span>(<span class="hljs-string">"hClient"</span>);
-<span class="hljs-keyword">const</span> holochainClient = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@holochain/hc-web-client"</span>);
-
-holoClient = hClient.makeWebClient(<span class="hljs-built_in">window</span>.holochainclient);</code></pre>
-				<p>This will return an API compatible holoClient object to make calls with but will included all the relevent hooks to be holo enabled.</p>
-				<hr>
-				<p>The final piece is the login modal. This can be injected into the app UI by calling</p>
-				<pre><code>hClient.insertLoginHtml()<span class="hljs-comment">;</span>
-hClient.registerLoginCallbacks()<span class="hljs-comment">;</span></code></pre><p>This has its own inline scoped CSS and should not interfere with the rest of the application. hClient is then able to trigger this modal to block any further user interaction until they are authenticated.</p>
-				<h2 id="running-tests">Running tests</h2>
-				<p>Before trying to run any tests the repo needs to be initialised with</p>
-				<pre><code>npm <span class="hljs-keyword">install</span></code></pre><h3 id="unit-tests">Unit tests</h3>
-				<p>Unit tests exist for hClient and can be run using:</p>
-				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash"> unit_test</span></code></pre><p>These do not run in a browser environment</p>
-				<h3 id="integration-tests">Integration tests</h3>
-				<p>The integration of hLoader and hLoader are tested with the resolver.holo.host and saltmine.holo.host set up as mocks. For true integration tests these mocks can be removed in the future. Run the ui-automation tests by running</p>
-				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash"> prepare:integration_tests</span>
-npm <span class="hljs-keyword">run</span><span class="bash"> integration_test</span></code></pre><p>or instead of <code>npm run integration_test</code> you can use the following to run the integration tests in the interactive cypress test runner</p>
-				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash"> prepare:integration_tests</span>
-cd ./integration_tests
-npm <span class="hljs-keyword">run</span><span class="bash"> <span class="hljs-built_in">test</span>:runner</span></code></pre><h3 id="publishing">Publishing</h3>
-				<p>To publish a new release to npm use the following steps. Ensure you are on the master branch then run</p>
-				<ul>
-					<li><code>npm version patch</code></li>
-					<li><code>npm publish</code></li>
-				</ul>
-				<p>This will automatically build, lint, commit and push a new git tag before publishing. You can alternatively use <code>npm version major|minor|patch</code> to increment the correct version number. Please do not modify the version number in the package.json directly.</p>
-				<h2 id="contributors">Contributors</h2>
-				<ul>
-					<li><strong>Willem Olding</strong> - <a href="https://github.com/willemolding">github</a></li>
-					<li><strong>Paul Hartzog</strong> - <a href="https://github.com/paulbhartzog-holo">github</a></li>
-				</ul>
-				<h2 id="license">License</h2>
-				<p>This project is licensed under the GPL-3 License - see the <a href="LICENSE">LICENSE</a> file for details</p>
-			</div>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Classes</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_dpki_ultralite_keypair_.keypair.html" class="tsd-kind-icon">Keypair</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-not-exported">
+							<h3>Variables</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_dpki_ultralite_keypair_.html#_sodium" class="tsd-kind-icon">_sodium</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_dpki_ultralite_keypair_.html#msgpack" class="tsd-kind-icon">msgpack</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_dpki_ultralite_keypair_.html#util" class="tsd-kind-icon">util</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="_sodium" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> _sodium</h3>
+					<div class="tsd-signature tsd-kind-icon">_sodium<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require(&#x27;libsodium-wrappers-sumo&#x27;)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Holo-Host/hClient.js/blob/263dd38/src/dpki-ultralite/keypair.ts#L15">dpki-ultralite/keypair.ts:15</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="msgpack" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> msgpack</h3>
+					<div class="tsd-signature tsd-kind-icon">msgpack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require(&#x27;msgpack-lite&#x27;)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Holo-Host/hClient.js/blob/263dd38/src/dpki-ultralite/keypair.ts#L16">dpki-ultralite/keypair.ts:16</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="util" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> util</h3>
+					<div class="tsd-signature tsd-kind-icon">util<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require(&#x27;./util&#x27;)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Holo-Host/hClient.js/blob/263dd38/src/dpki-ultralite/keypair.ts#L17">dpki-ultralite/keypair.ts:17</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
 					<li class="globals  ">
-						<a href="globals.html"><em>Globals</em></a>
+						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_dpki_ultralite_index_.html">"dpki-<wbr>ultralite/index"</a>
+						<a href="_dpki_ultralite_index_.html">"dpki-<wbr>ultralite/index"</a>
+					</li>
+					<li class="current tsd-kind-external-module">
+						<a href="_dpki_ultralite_keypair_.html">"dpki-<wbr>ultralite/keypair"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_dpki_ultralite_keypair_.html">"dpki-<wbr>ultralite/keypair"</a>
+						<a href="_dpki_ultralite_util_.html">"dpki-<wbr>ultralite/util"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_dpki_ultralite_util_.html">"dpki-<wbr>ultralite/util"</a>
+						<a href="_index_.html">"index"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_index_.html">"index"</a>
+						<a href="_keymanagement_.html">"key<wbr>Management"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_keymanagement_.html">"key<wbr>Management"</a>
+						<a href="_login_.html">"login"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_login_.html">"login"</a>
+						<a href="_resolver_.html">"resolver"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_resolver_.html">"resolver"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_types_.html">"types"</a>
+						<a href="_types_.html">"types"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="../classes/_dpki_ultralite_keypair_.keypair.html" class="tsd-kind-icon">Keypair</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_dpki_ultralite_keypair_.html#_sodium" class="tsd-kind-icon">_sodium</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_dpki_ultralite_keypair_.html#msgpack" class="tsd-kind-icon">msgpack</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_dpki_ultralite_keypair_.html#util" class="tsd-kind-icon">util</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
@@ -212,7 +235,7 @@ npm <span class="hljs-keyword">run</span><span class="bash"> <span class="hljs-b
 	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>
