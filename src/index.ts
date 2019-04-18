@@ -348,7 +348,10 @@ const hClient = (function () {
     getCurrentAgentId,
     requestHosting,
     getDnaForUrl,
-    getHostsForUrl
+    getHostsForUrl,
+    setKeyManagementFunctions,
+    keyManagement: require('./keyManagement'),
+    dpkiUltralite: require('./dpki-ultralite'),
   }
 })()
 
