@@ -351,7 +351,7 @@ const hClient = (function () {
     getHostsForUrl,
     setKeyManagementFunctions,
     keyManagement: require('./keyManagement'),
-    dpkiUltralite: require('./dpki-ultralite'),
+    dpkiUltralite: require('./dpki-ultralite')
   }
 })()
 
