@@ -210,7 +210,7 @@ const hClient = (function () {
    */
   const requestHosting = async () => {
     if (websocket) {
-      await websocket.call('holo/agents/new', {
+      return websocket.call('holo/agents/new', {
         agentId: await getCurrentAgentId(),
         happId: _happId
       })
