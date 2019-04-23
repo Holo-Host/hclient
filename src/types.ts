@@ -1,5 +1,5 @@
 export interface MakeWebClientOptionals {
-  url?: string,
+  hostUrl?: string,
   dnaHash?: string,
   preCall?: PreCallFunction,
   postCall?: PostCallFunction,
@@ -17,6 +17,6 @@ export interface HolochainClient {
 export type WebsocketClient = any
 export type Keypair = any
 
-export type PreCallFunction = (dnaHash: string, callString: string, params: any) => Promise<{ callString: string, params: any }>
+export type PreCallFunction = (callString: string, params: any) => Promise<{ callString: string, params: any }>
 export type PostCallFunction = (response: string) => string
 export type PostConnectFunction = (ws: WebsocketClient) => Promise<WebsocketClient>

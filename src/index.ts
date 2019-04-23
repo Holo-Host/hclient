@@ -139,24 +139,23 @@ const hClient = (function () {
    */
   const makeWebClient = async (holochainClient: HolochainClient, happId: string, optionals: MakeWebClientOptionals = {}) => {
     _happId = happId
-    const url = optionals.url || await getDefaultWebsocketUrl()
-    const dnaHash = optionals.dnaHash || await getDnaForUrl(window.location.origin)
+    const hostUrl = optionals.hostUrl || await getDefaultWebsocketUrl()
     const preCall = optionals.preCall || _preCall
     const postCall = optionals.postCall || _postCall
     const postConnect = optionals.postConnect || _postConnect
 
     return {
-      connect: () => holochainClient.connect(url).then(async ({ call, close, ws }) => {
+      connect: () => holochainClient.connect(hostUrl).then(async ({ call, close, ws }) => {
         ws = await postConnect(ws)
         return {
           call: (...callStringSegments: Array<string>) => async (params: any) => {
             const callString = callStringSegments.length === 1 ? callStringSegments[0] : callStringSegments.join('/')
-            const { callString: newCallString, params: newParams } = await preCall(dnaHash, callString, params)
+            const { callString: newCallString, params: newParams } = await preCall(callString, params)
             return call(newCallString)(newParams).then(postCall)
           },
           callZome: (_instanceId: string, zome: string, func: string) => async (params: any) => {
             const callString = [_instanceId, zome, func].join('/')
-            const { callString: newCallString, params: newParams } = await preCall(dnaHash, callString, params)
+            const { callString: newCallString, params: newParams } = await preCall(callString, params)
             return call(newCallString)(newParams).then(postCall)
           },
           close,
@@ -224,7 +223,7 @@ const hClient = (function () {
   /**
    * Gets the default websocket url.
    *
-   * @return     {Object}  The default websocket url.
+   * @return     {Object}  The default websocket url to a host.
    */
   const getDefaultWebsocketUrl = async () => {
     const hosts = await getHostsForUrl(window.location.origin)
@@ -269,7 +268,7 @@ const hClient = (function () {
    * @param      {Object}  params      The parameters
    * @return     {Object}  The updated callString and params passed to call
    */
-  const _preCall: PreCallFunction = async (dnaHash, callString, params) => {
+  const _preCall: PreCallFunction = async (callString, params) => {
     if (!keypair) {
       throw new Error('trying to call with no keys')
     } else {
@@ -289,7 +288,6 @@ const hClient = (function () {
       const callParams = {
         agentId: await getCurrentAgentId(),
         happId: _happId,
-        dnaHash,
         instanceId,
         zome,
         function: funcName,
