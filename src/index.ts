@@ -125,7 +125,8 @@ const hClient = (function () {
    * @param      {Object}    holochainClient A hc-web-client module to wrap
    * @param      {string}    {happId}              The hApp identifier that Holo has linked to this application
    * @param      {Object}    [optionals]           Non-required arguments
-   * @param      {string}    [optionals.url]       The url to direct websocket calls. Defaults to the same location serving the UI but with the websocket protocol.
+   * @param      {string}    [optionals.hostUrl]   Override the host tranche resolution process and call this host url directly. Defaults to calling the resolver with the resolverOrigin and using the first host URL it returns
+   * @param      {string}    [optionals.hAppUrl]   Override the hAppUrl that is passed in the call to the resolver to get the host tranche. Defaults to using window.location.origin
    * @param      {string}    [optionals.dnaHash]   Override the hash of the DNA that would usually be provided by the loader. Mostly for testing purposes
    * @param      {Function}  [optionals.preCall]   The pre call funciton. Takes the callString and params and returns new callString and params.
    * Leave as default unless you know what you are doing.
@@ -139,7 +140,14 @@ const hClient = (function () {
    */
   const makeWebClient = async (holochainClient: HolochainClient, happId: string, optionals: MakeWebClientOptionals = {}) => {
     _happId = happId
-    const hostUrl = optionals.hostUrl || await getDefaultWebsocketUrl()
+    let hostUrl: string
+    if (optionals.hostUrl === undefined) {
+      const hAppUrl = optionals.hAppUrl || window.location.origin
+      hostUrl = await getHostForUrl(hAppUrl)
+
+    } else {
+      hostUrl = optionals.hostUrl
+    }
     const preCall = optionals.preCall || _preCall
     const postCall = optionals.postCall || _postCall
     const postConnect = optionals.postConnect || _postConnect
@@ -221,12 +229,12 @@ const hClient = (function () {
   /* =====  End of Public API Functions  ====== */
 
   /**
-   * Gets the default websocket url.
+   * Calls the resolver with the given url and returns the first host in the tranche
    *
-   * @return     {Object}  The default websocket url to a host.
+   * @return     {Object}  The websocket url to a host
    */
-  const getDefaultWebsocketUrl = async () => {
-    const hosts = await getHostsForUrl(window.location.origin)
+  const getHostForUrl = async (url: string) => {
+    const hosts = await getHostsForUrl(url)
     return 'ws://' + hosts[0]
   }
   // const getDefaultWebsocketUrl = () => document.getElementsByTagName('base')[0].href.replace('http', 'ws')
