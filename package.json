@@ -9,7 +9,6 @@
     "build:lib": "mkdir -p ./lib && tsc",
     "doc": "typedoc --out ./docs/ ./src/",
     "lint": "tslint -p ./tslint.json",
-    "lint:fix": "eslint ./src/ --fix",
     "prepare:integration_tests": "cd ./integration_tests && npm install",
     "integration_test": "cd ./integration_tests && npm run test",
     "unit_test": "npm run build:lib && mocha ./test/*.js -r chai/register-should",
