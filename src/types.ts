@@ -1,5 +1,6 @@
 export interface MakeWebClientOptionals {
   hostUrl?: string,
+  hAppUrl?: string,
   dnaHash?: string,
   preCall?: PreCallFunction,
   postCall?: PostCallFunction,
