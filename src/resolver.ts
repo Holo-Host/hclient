@@ -8,7 +8,7 @@
  */
 const resolverUrl = 'http://resolver.holohost.net/'
 
-const callResolver = (DNS: string) => {
+const callDNSResolver = (DNS: string) => {
   return fetch(resolverUrl + '/' + DNS, {
     method: 'GET',
     headers: {
@@ -17,7 +17,7 @@ const callResolver = (DNS: string) => {
   })
 }
 
-const callResolver = (params: any) => {
+const callTrancheResolver = (params: any) => {
   const body = Object.keys(params).map((key) => {
     return encodeURIComponent(key) + '=' + encodeURIComponent(params[key])
   }).join('&')
@@ -37,10 +37,10 @@ const callResolver = (params: any) => {
  * This will overwrite the current key
  * @memberof module:hClient
  */
-const getHostsForUrl = (url: string) => {
-  return callResolver({ url })
+const getHashForUrl = (DNS: string) => {
+  return callDNSResolver(DNS)
     .then(r => r.json())
-    .then(json => json.hosts)
+    .then(json => json.hash) // this should be the HHA hash
 }
 
 /**
@@ -48,13 +48,25 @@ const getHostsForUrl = (url: string) => {
  * This will overwrite the current key
  * @memberof module:hClient
  */
-const getDnaForUrl = (url: string) => {
-  return callResolver({ url })
+const getHostsForUrl = (DNS: string) => {
+  return callTrancheResolver({ DNS })
     .then(r => r.json())
-    .then(json => json.dna)
+    .then(json => json.hosts)
 }
+
+// /**
+//  * Displays the login dialog and generates a new read/write key with the email/password
+//  * This will overwrite the current key
+//  * @memberof module:hClient
+//  */
+// const getDnaForUrl = (url: string) => {
+//   return callResolver({ url })
+//     .then(r => r.json())
+//     .then(json => json.dna)
+// }
 
 module.exports = {
   getHostsForUrl,
-  getDnaForUrl
+  getHashForUrl
+  // getDnaForUrl
 }

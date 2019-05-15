@@ -57,7 +57,8 @@ const hClient = (function () {
   } = require('./login')
 
   const {
-    getDnaForUrl,
+    getHashForUrl,
+    // getDnaForUrl,
     getHostsForUrl
   } = require('./resolver')
 
@@ -122,12 +123,18 @@ const hClient = (function () {
    * connect to go to a given URL. This is the essential requirement to holo-fy any holochain web UI.
    * @memberof module:hClient
    *
-   * @param      {Object}    holochainClient A hc-web-client module to wrap
-   * @param      {string}    {happId}              The hApp identifier that Holo has linked to this application
+   * @param      {Object}    holochainClient       A hc-web-client module to wrap
+   *
    * @param      {Object}    [optionals]           Non-required arguments
+   * @param      {string}    [optionals.happId]    Override the happId. Defaults to using the hApp identifier that Holo has linked to this application (this is the HHA address of the entry storing the hApp bundle and happ DNS info).
+   * @param      {string}    [optionals.hAppUrl]   Override the hAppUrl that is passed in the call to the resolver to get the host tranche (the associated DNS). Defaults to using window.location.origin
    * @param      {string}    [optionals.hostUrl]   Override the host tranche resolution process and call this host url directly. Defaults to calling the resolver with the resolverOrigin and using the first host URL it returns
-   * @param      {string}    [optionals.hAppUrl]   Override the hAppUrl that is passed in the call to the resolver to get the host tranche. Defaults to using window.location.origin
-   * @param      {string}    [optionals.dnaHash]   Override the hash of the DNA that would usually be provided by the loader. Mostly for testing purposes
+
+   //
+   *NOTE: Determine whether the dnaHash is deprecated... :
+   @param      {string}    [optionals.dnaHash]   Override the hash of the DNA that would usually be provided by the loader. Mostly for testing purposes
+  //
+
    * @param      {Function}  [optionals.preCall]   The pre call funciton. Takes the callString and params and returns new callString and params.
    * Leave as default unless you know what you are doing.
    *
@@ -138,16 +145,24 @@ const hClient = (function () {
    * Takes a RPC-websockets object and returns it preCall=preCall, postCall=postCall, postConnect=postConnect.
    * Leave as default unless you know what you are doing.
    */
-  const makeWebClient = async (holochainClient: HolochainClient, happId: string, optionals: MakeWebClientOptionals = {}) => {
-    _happId = happId
+  const makeWebClient = async (holochainClient: HolochainClient, optionals: MakeWebClientOptionals = {}) => {
     let hostUrl: string
     if (optionals.hostUrl === undefined) {
-      const hAppUrl = optionals.hAppUrl || window.location.origin
-      hostUrl = await getHostForUrl(hAppUrl)
+      const HappBundleDNS = optionals.hAppUrl || window.location.origin
+      hostUrl = await getHostForUrl(HappBundleDNS)
 
     } else {
       hostUrl = optionals.hostUrl
     }
+
+    let _happId: string
+    if ( optionals.happId && optionals.happId !== undefined) {
+      _happId = optionals.happId
+    } else {
+      const HappBundleDNS = optionals.hAppUrl || window.location.origin
+      _happId=  await getHashForUrl(HappBundleDNS)
+    }
+
     const preCall = optionals.preCall || _preCall
     const postCall = optionals.postCall || _postCall
     const postConnect = optionals.postConnect || _postConnect
@@ -227,6 +242,17 @@ const hClient = (function () {
   }
 
   /* =====  End of Public API Functions  ====== */
+
+  /**
+   * Calls the resolver with the given DNS and returns the hApp Bundle HHA hash/address
+   *
+   * @return     {Object}  The websocket DNS to a happId
+   */
+  const getHappId = async (DNS: string) => {
+    const HHA_happId = await getHHAHappId(DNS)
+    return HHA_happId
+  }
+  //
 
   /**
    * Calls the resolver with the given url and returns the first host in the tranche
@@ -354,7 +380,8 @@ const hClient = (function () {
     makeWebClient,
     getCurrentAgentId,
     requestHosting,
-    getDnaForUrl,
+    // getDnaForUrl,
+    getHashForUrl,
     getHostsForUrl,
     setKeyManagementFunctions,
     keyManagement: require('./keyManagement'),
