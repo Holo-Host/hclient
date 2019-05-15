@@ -8,6 +8,15 @@
  */
 const resolverUrl = 'http://resolver.holohost.net/'
 
+const callResolver = (DNS: string) => {
+  return fetch(resolverUrl + '/' + DNS, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+}
+
 const callResolver = (params: any) => {
   const body = Object.keys(params).map((key) => {
     return encodeURIComponent(key) + '=' + encodeURIComponent(params[key])
