@@ -45,7 +45,6 @@ const getHostsForUrl = (DNS: string) => {
     .then(json => json.hosts)
 }
 
-
 module.exports = {
   getHostsForUrl,
   getHashForUrl
