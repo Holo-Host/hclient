@@ -8,16 +8,7 @@
  */
 const resolverUrl = 'http://resolver.holohost.net/'
 
-const callDNSResolver = (DNS: string) => {
-  return fetch(resolverUrl + '/' + DNS, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-}
-
-const callTrancheResolver = (params: any) => {
+const callResolver = (params: any) => {
   const body = Object.keys(params).map((key) => {
     return encodeURIComponent(key) + '=' + encodeURIComponent(params[key])
   }).join('&')
@@ -38,9 +29,9 @@ const callTrancheResolver = (params: any) => {
  * @memberof module:hClient
  */
 const getHashForUrl = (DNS: string) => {
-  return callDNSResolver(DNS)
+  return callResolver({ url: DNS })
     .then(r => r.json())
-    .then(json => json.hash) // this should be the HHA hash
+    .then(json => json.dna) // this should be the HHA hash >> can retitle it to "json.hash"
 }
 
 /**
@@ -49,11 +40,11 @@ const getHashForUrl = (DNS: string) => {
  * @memberof module:hClient
  */
 const getHostsForUrl = (DNS: string) => {
-  return callTrancheResolver({ DNS })
+  return callResolver({ url: DNS })
     .then(r => r.json())
     .then(json => json.hosts)
 }
-
+//
 // /**
 //  * Displays the login dialog and generates a new read/write key with the email/password
 //  * This will overwrite the current key

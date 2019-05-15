@@ -105,6 +105,7 @@ describe('keyManagement', function () {
   })
 })
 
+// TODO: revisit and rewrite DNA to HHA Hash
 describe('resolver', function () {
   before(() => {
     fetchMock.post('http://resolver.holohost.net', {
@@ -116,8 +117,8 @@ describe('resolver', function () {
     })
   })
 
-  it('can call getDnaForUrl which triggers the correct network request', async () => {
-    let response = await resolver.getDnaForUrl('anything')
+  it('can call getHashForUrl which triggers the correct network request', async () => {
+    let response = await resolver.getHashForUrl('anything')
     response.should.equal('a_working_dna')
   })
 

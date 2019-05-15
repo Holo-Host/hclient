@@ -58,7 +58,6 @@ const hClient = (function () {
 
   const {
     getHashForUrl,
-    // getDnaForUrl,
     getHostsForUrl
   } = require('./resolver')
 
@@ -126,15 +125,9 @@ const hClient = (function () {
    * @param      {Object}    holochainClient       A hc-web-client module to wrap
    *
    * @param      {Object}    [optionals]           Non-required arguments
-   * @param      {string}    [optionals.happId]    Override the happId. Defaults to using the hApp identifier that Holo has linked to this application (this is the HHA address of the entry storing the hApp bundle and happ DNS info).
+   * @param      {string}    [optionals.happId]    Override the happId; mostly for testing purposes. Defaults to using the hApp identifier that Holo has linked to this application (this is the HHA address of the entry storing the hApp bundle and happ DNS info).
    * @param      {string}    [optionals.hAppUrl]   Override the hAppUrl that is passed in the call to the resolver to get the host tranche (the associated DNS). Defaults to using window.location.origin
    * @param      {string}    [optionals.hostUrl]   Override the host tranche resolution process and call this host url directly. Defaults to calling the resolver with the resolverOrigin and using the first host URL it returns
-
-   //
-   *NOTE: Determine whether the dnaHash is deprecated... :
-   @param      {string}    [optionals.dnaHash]   Override the hash of the DNA that would usually be provided by the loader. Mostly for testing purposes
-  //
-
    * @param      {Function}  [optionals.preCall]   The pre call funciton. Takes the callString and params and returns new callString and params.
    * Leave as default unless you know what you are doing.
    *
@@ -156,11 +149,11 @@ const hClient = (function () {
     }
 
     let _happId: string
-    if ( optionals.happId && optionals.happId !== undefined) {
+    if (optionals.happId && optionals.happId !== undefined) {
       _happId = optionals.happId
     } else {
       const HappBundleDNS = optionals.hAppUrl || window.location.origin
-      _happId=  await getHashForUrl(HappBundleDNS)
+      _happId = await getHashForUrl(HappBundleDNS)
     }
 
     const preCall = optionals.preCall || _preCall
@@ -242,17 +235,6 @@ const hClient = (function () {
   }
 
   /* =====  End of Public API Functions  ====== */
-
-  /**
-   * Calls the resolver with the given DNS and returns the hApp Bundle HHA hash/address
-   *
-   * @return     {Object}  The websocket DNS to a happId
-   */
-  const getHappId = async (DNS: string) => {
-    const HHA_happId = await getHHAHappId(DNS)
-    return HHA_happId
-  }
-  //
 
   /**
    * Calls the resolver with the given url and returns the first host in the tranche
@@ -380,7 +362,6 @@ const hClient = (function () {
     makeWebClient,
     getCurrentAgentId,
     requestHosting,
-    // getDnaForUrl,
     getHashForUrl,
     getHostsForUrl,
     setKeyManagementFunctions,
