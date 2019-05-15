@@ -33,7 +33,6 @@ describe('hClient: basic test', () => {
     // use hClient to override
     const hostUrl = 'ws://test'
     const happId = 'someId'
-    // const dnaHash = 'Qmtest'
     const preCall = (callString, params) => ({ callString, params })
     const postCall = response => 'override response'
     const postConnect = ws => ws
@@ -110,7 +109,7 @@ describe('resolver', function () {
   before(() => {
     fetchMock.post('http://resolver.holohost.net', {
       requestURL: 'requested-url.something',
-      dna: 'a_working_dna',
+      hash: 'a_working_HHA_hash', // HHA entry hash/address
       hosts: [
         'some-node-address'
       ]
@@ -119,7 +118,7 @@ describe('resolver', function () {
 
   it('can call getHashForUrl which triggers the correct network request', async () => {
     let response = await resolver.getHashForUrl('anything')
-    response.should.equal('a_working_dna')
+    response.should.equal('a_working_HHA_hash')
   })
 
   it('can call getHostsForUrl which triggers the correct network request', async () => {
