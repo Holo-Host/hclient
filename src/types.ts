@@ -1,4 +1,5 @@
 export interface MakeWebClientOptionals {
+  happId?: string,
   hostUrl?: string,
   hAppUrl?: string,
   dnaHash?: string,

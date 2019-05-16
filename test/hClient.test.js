@@ -32,12 +32,12 @@ describe('hClient: basic test', () => {
 
     // use hClient to override
     const hostUrl = 'ws://test'
-    const dnaHash = 'Qmtest'
     const happId = 'someId'
+    // const dnaHash = 'Qmtest'
     const preCall = (callString, params) => ({ callString, params })
     const postCall = response => 'override response'
     const postConnect = ws => ws
-    const holoClient = await hClient.makeWebClient(holochainClient, happId, { hostUrl, dnaHash, preCall, postCall, postConnect })
+    const holoClient = await hClient.makeWebClient(holochainClient, { hostUrl,  happId, preCall, postCall, postConnect })
 
     // make a call with the overriden version
     let secondCallResult
@@ -105,6 +105,7 @@ describe('keyManagement', function () {
   })
 })
 
+// TODO: revisit and rewrite DNA to HHA Hash
 describe('resolver', function () {
   before(() => {
     fetchMock.post('http://resolver.holohost.net', {
@@ -116,8 +117,8 @@ describe('resolver', function () {
     })
   })
 
-  it('can call getDnaForUrl which triggers the correct network request', async () => {
-    let response = await resolver.getDnaForUrl('anything')
+  it('can call getHashForUrl which triggers the correct network request', async () => {
+    let response = await resolver.getHashForUrl('anything')
     response.should.equal('a_working_dna')
   })
 
