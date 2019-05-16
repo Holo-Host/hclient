@@ -299,7 +299,7 @@ const hClient = (function () {
         instanceId,
         zome,
         function: funcName,
-        params,
+        args: params,
         signature: signatureBase64
       }
 
