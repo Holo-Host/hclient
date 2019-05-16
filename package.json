@@ -47,7 +47,7 @@
   "dependencies": {
     "@holochain/hcid-js": "0.0.5",
     "dialog-polyfill": "^0.4.10",
-    "jquery": "^3.3.1",
+    "jquery": ">=3.4.0",
     "libsodium-wrappers-sumo": "^0.7.4",
     "msgpack-lite": "^0.1.26"
   }
