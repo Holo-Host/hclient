@@ -31,7 +31,7 @@ const callResolver = (params: any) => {
 const getHashForUrl = (DNS: string) => {
   return callResolver({ url: DNS })
     .then(r => r.json())
-    .then(json => json.dna) // this should be the HHA hash >> can retitle it to "json.hash"
+    .then(json => json.hash) // this should be the HHA hash
 }
 
 /**
@@ -44,20 +44,8 @@ const getHostsForUrl = (DNS: string) => {
     .then(r => r.json())
     .then(json => json.hosts)
 }
-//
-// /**
-//  * Displays the login dialog and generates a new read/write key with the email/password
-//  * This will overwrite the current key
-//  * @memberof module:hClient
-//  */
-// const getDnaForUrl = (url: string) => {
-//   return callResolver({ url })
-//     .then(r => r.json())
-//     .then(json => json.dna)
-// }
 
 module.exports = {
   getHostsForUrl,
   getHashForUrl
-  // getDnaForUrl
 }
