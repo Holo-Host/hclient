@@ -148,7 +148,6 @@ const hClient = (function () {
       hostUrl = optionals.hostUrl
     }
 
-    let _happId: string
     if (optionals.happId && optionals.happId !== undefined) {
       _happId = optionals.happId
     } else {
@@ -225,6 +224,7 @@ const hClient = (function () {
    */
   const requestHosting = async () => {
     if (websocket) {
+      console.log('This is the HHA Hash returned from the KV STORE >> _happId: ', _happId)
       return websocket.call('holo/agents/new', {
         agentId: await getCurrentAgentId(),
         happId: _happId
