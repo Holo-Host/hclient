@@ -224,7 +224,6 @@ const hClient = (function () {
    */
   const requestHosting = async () => {
     if (websocket) {
-      console.log('This is the HHA Hash returned from the KV STORE >> _happId: ', _happId)
       return websocket.call('holo/agents/new', {
         agentId: await getCurrentAgentId(),
         happId: _happId
