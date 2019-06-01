@@ -90,7 +90,6 @@ const hClient = (function () {
    */
   const triggerLoginPrompt = async () => {
     const { email, password, newRegistration } = await showLoginDialog()
-    console.log('newRegistration', newRegistration)
     return startLoginProcess(email, password, newRegistration)
   }
 
@@ -225,7 +224,6 @@ const hClient = (function () {
    */
   const requestHosting = async () => {
     if (websocket) {
-      console.log('This is the HHA Hash returned from the KV STORE >> _happId: ', _happId)
       return websocket.call('holo/agents/new', {
         agentId: await getCurrentAgentId(),
         happId: _happId
