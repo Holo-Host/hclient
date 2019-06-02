@@ -176,6 +176,9 @@ const regenerateReadwriteKeypair = async (
 ) => {
   const registeredSalt = await getRegisteredSaltCallback(email)
   const { hash } = await pwHash(password, registeredSalt.slice(0, 16))
+
+  // TODO: DETERMINE IF THE HASH IS THE CORRECT HASH..
+  // WARNING: Currently there is no check for the correct hash, which results in creating the A NEW AGENT keypair/ID rather than recreating the the current Agent's correct keypair/ID.
   const keypair = await Keypair.newFromSeed(hash)
   return keypair
 }
