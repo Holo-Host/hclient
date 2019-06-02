@@ -22,7 +22,7 @@
   "files": [
     "lib"
   ],
-  "author": "",
+  "author": " ",
   "license": "GPL-3",
   "devDependencies": {
     "@babel/cli": "^7.2.3",
