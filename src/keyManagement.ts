@@ -18,7 +18,7 @@ const saltmineUrl = '//saltmine.holohost.net'
  */
 const callSaltmine = (method: string, params?: any): Promise<Response> => {
   let body
-  if (method === 'GET') {
+  if (method === 'GET' && !params) {
     body = undefined
   } else {
     body = Object.keys(params).map((key) => {
@@ -71,8 +71,8 @@ const registerSalt = (email: string, salt: Uint8Array) => {
  * @return     {Promise}  If successful will resolve to previously registered salt
  */
 const getRegisteredSalt = (email: string) => {
-  // TODO : Check to see if email is already registered... then proceed with salt retrieval...
-  return callSaltmine('POST', { email })
+  // Check to see if email is already registered and return salt if successful (therefore make a GET call instead of POST...).
+  return callSaltmine('GET', { email })
     .then(r => r.text())
     .then(fromBase64)
       // @ts-ignore
@@ -174,13 +174,21 @@ const regenerateReadwriteKeypair = async (
   password: string,
   getRegisteredSaltCallback = getRegisteredSalt
 ) => {
-  const registeredSalt = await getRegisteredSaltCallback(email)
-  const { hash } = await pwHash(password, registeredSalt.slice(0, 16))
+  try {
+      const registeredSalt = await getRegisteredSaltCallback(email)
 
-  // TODO: DETERMINE IF THE HASH IS THE CORRECT HASH..
-  // WARNING: Currently there is no check for the correct hash, which results in creating the A NEW AGENT keypair/ID rather than recreating the the current Agent's correct keypair/ID.
-  const keypair = await Keypair.newFromSeed(hash)
-  return keypair
+      if(registeredSalt) {
+      const { hash } = await pwHash(password, registeredSalt.slice(0, 16))
+
+      // TODO: DETERMINE IF THE HASH IS THE CORRECT HASH..
+      // WARNING: Currently there is no check for the correct hash, which results in creating the A NEW AGENT keypair/ID rather than recreating the the current Agent's correct keypair/ID.
+      const keypair = await Keypair.newFromSeed(hash)
+      return keypair
+    }
+  }
+  catch(e) {
+    return console.error('No salt found. Unable to log in.', e)
+  }
 }
 
 module.exports = {
