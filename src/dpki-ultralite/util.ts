@@ -164,7 +164,7 @@ exports.pwDec = pwDec
  * Convert a buffer to a base64 encoded string.
  * Uses the URL safe no padding option
  *
- * @param      {Buffer}  buffer  The data to encode
+ * @param      {Buffer}  buffer  ThefromBase64 data to encode
  * @return     {string}  base64 encoded string
  */
 export function toBase64 (buffer: Buffer): Promise<string> {
