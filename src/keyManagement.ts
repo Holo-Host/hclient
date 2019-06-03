@@ -23,12 +23,12 @@ const callSaltmine = (method: string, params?: any): Promise<Response> => {
     body = undefined
   } else if (method === 'GET' && params) {
     body = undefined
-    const email = params.email
+    let email = params.email
     if (!email) {
       // TODO: return error message here...
-      return console.log("No email provided")
+      console.log('No email provided')
       // make email value an empty string for now to circumvent unhandled error
-      email = {email: ''}
+      email = { email: '' }
     }
     // encode the URI with the key/value pairs for GET call
     saltmineUrl = saltmineUrl + '?' + encodeURIComponent(email) + '=' + encodeURIComponent(params[email])

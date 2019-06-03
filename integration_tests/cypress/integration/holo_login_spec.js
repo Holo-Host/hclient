@@ -64,9 +64,8 @@ describe('The integration test page', function () {
   it('Can select to sign-up and submit', () => {
     cy.wait(2000)
     cy.get('#trigger-unauthorized').click()
-    cy.wait(500)
+    cy.wait(1000)
     cy.get('.holo-dialog').within(() => {
-      cy.wait(500)
       cy.get('#signup').click()
       cy.get("input[name='email']").type('test@test.com')
       cy.get("input[name='pass']").type('abc123')
