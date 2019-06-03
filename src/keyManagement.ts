@@ -7,7 +7,7 @@
 
 const { Keypair, randomBytes, pwHash, fromBase64, toBase64 } = require('./dpki-ultralite')
 
-const saltmineUrl = '//saltmine.holohost.net'
+let saltmineUrl = '//saltmine.holohost.net'
 
 /**
  * Make a call to the saltmine API
@@ -17,9 +17,15 @@ const saltmineUrl = '//saltmine.holohost.net'
  * @return     {Promise}     Promise that resolves to the reponse
  */
 const callSaltmine = (method: string, params?: any): Promise<Response> => {
+  console.log('params : ', params)
   let body
   if (method === 'GET' && !params) {
     body = undefined
+  } else if (method === 'GET' && params) {
+    body = undefined
+    const email = params.email
+    // encode the URI with the key/value pairs for GET call
+    saltmineUrl = saltmineUrl + '?' + encodeURIComponent(email) + '=' + encodeURIComponent(params[email])
   } else {
     body = Object.keys(params).map((key) => {
       return encodeURIComponent(key) + '=' + encodeURIComponent(params[key])
@@ -175,9 +181,9 @@ const regenerateReadwriteKeypair = async (
   getRegisteredSaltCallback = getRegisteredSalt
 ) => {
   try {
-      const registeredSalt = await getRegisteredSaltCallback(email)
+    const registeredSalt = await getRegisteredSaltCallback(email)
 
-      if(registeredSalt) {
+    if (registeredSalt) {
       const { hash } = await pwHash(password, registeredSalt.slice(0, 16))
 
       // TODO: DETERMINE IF THE HASH IS THE CORRECT HASH..
@@ -185,8 +191,7 @@ const regenerateReadwriteKeypair = async (
       const keypair = await Keypair.newFromSeed(hash)
       return keypair
     }
-  }
-  catch(e) {
+  } catch (e) {
     return console.error('No salt found. Unable to log in.', e)
   }
 }
