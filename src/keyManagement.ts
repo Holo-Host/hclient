@@ -7,7 +7,7 @@
 
 const { Keypair, randomBytes, pwHash, fromBase64, toBase64 } = require('./dpki-ultralite')
 
-const saltmineUrl = '//saltmine.holohost.net'
+let saltmineUrl = '//saltmine.holohost.net'
 
 /**
  * Make a call to the saltmine API
@@ -17,9 +17,22 @@ const saltmineUrl = '//saltmine.holohost.net'
  * @return     {Promise}     Promise that resolves to the reponse
  */
 const callSaltmine = (method: string, params?: any): Promise<Response> => {
+  console.log('params : ', params)
   let body
-  if (method === 'GET') {
+  if (method === 'GET' && !params) {
     body = undefined
+  } else if (method === 'GET' && params) {
+    body = undefined
+    let email = params.email
+    if (!email) {
+      // TODO: return error message here...
+      console.log('No email provided')
+      // make email value an empty string for now to circumvent unhandled error
+      email = { email: '' }
+    }
+    // encode the URI with the key/value pairs for GET call
+    saltmineUrl = saltmineUrl + '?' + encodeURIComponent(email) + '=' + encodeURIComponent(params[email])
+    console.log('the GET request saltmineUrl : ', saltmineUrl)
   } else {
     body = Object.keys(params).map((key) => {
       return encodeURIComponent(key) + '=' + encodeURIComponent(params[key])
@@ -71,8 +84,8 @@ const registerSalt = (email: string, salt: Uint8Array) => {
  * @return     {Promise}  If successful will resolve to previously registered salt
  */
 const getRegisteredSalt = (email: string) => {
-  // TODO : Check to see if email is already registered... then proceed with salt retrieval...
-  return callSaltmine('POST', { email })
+  // Check to see if email is already registered and return salt if successful (therefore make a GET call instead of POST...).
+  return callSaltmine('GET', { email })
     .then(r => r.text())
     .then(fromBase64)
       // @ts-ignore
@@ -174,10 +187,20 @@ const regenerateReadwriteKeypair = async (
   password: string,
   getRegisteredSaltCallback = getRegisteredSalt
 ) => {
-  const registeredSalt = await getRegisteredSaltCallback(email)
-  const { hash } = await pwHash(password, registeredSalt.slice(0, 16))
-  const keypair = await Keypair.newFromSeed(hash)
-  return keypair
+  try {
+    const registeredSalt = await getRegisteredSaltCallback(email)
+
+    if (registeredSalt) {
+      const { hash } = await pwHash(password, registeredSalt.slice(0, 16))
+
+      // TODO: DETERMINE IF THE HASH IS THE CORRECT HASH..
+      // WARNING: Currently there is no check for the correct hash, which results in creating the A NEW AGENT keypair/ID rather than recreating the the current Agent's correct keypair/ID.
+      const keypair = await Keypair.newFromSeed(hash)
+      return keypair
+    }
+  } catch (e) {
+    return console.error('No salt found. Unable to log in.', e)
+  }
 }
 
 module.exports = {
