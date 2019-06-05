@@ -71,6 +71,7 @@ const registerSalt = (email: string, salt: Uint8Array) => {
  * @return     {Promise}  If successful will resolve to previously registered salt
  */
 const getRegisteredSalt = (email: string) => {
+  // TODO : Check to see if email is already registered... then proceed with salt retrieval...
   return callSaltmine('POST', { email })
     .then(r => r.text())
     .then(fromBase64)

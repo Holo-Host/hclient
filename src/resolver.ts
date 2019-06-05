@@ -31,7 +31,7 @@ const callResolver = (params: any) => {
 const getHashForUrl = (DNS: string) => {
   return callResolver({ url: DNS })
     .then(r => r.json())
-    .then(json => json.hash) // this should be the HHA hash
+    .then(json => json.hash) // this is the HHA hAppHash
 }
 
 /**

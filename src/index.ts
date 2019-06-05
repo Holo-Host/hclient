@@ -142,8 +142,8 @@ const hClient = (function () {
     let hostUrl: string
     if (optionals.hostUrl === undefined) {
       const HappBundleDNS = optionals.hAppUrl || window.location.origin
-      hostUrl = await getHostForUrl(HappBundleDNS)
-
+      const HappBundleHash = optionals.happId || null
+      hostUrl = await getHostForUrl(HappBundleDNS, HappBundleHash)
     } else {
       hostUrl = optionals.hostUrl
     }
@@ -240,9 +240,10 @@ const hClient = (function () {
    *
    * @return     {Object}  The websocket url to a host
    */
-  const getHostForUrl = async (url: string) => {
+  const getHostForUrl = async (url: string, happId: string) => {
     const hosts = await getHostsForUrl(url)
-    return 'ws://' + hosts[0]
+    const hhaHappId = _happId || happId || await getHashForUrl(url)
+    return 'ws://' + hhaHappId + '.' + hosts[0]
   }
   // const getDefaultWebsocketUrl = () => document.getElementsByTagName('base')[0].href.replace('http', 'ws')
 
@@ -287,11 +288,13 @@ const hClient = (function () {
     if (!keypair) {
       throw new Error('trying to call with no keys')
     } else {
-      console.log('call will be signed with', keypair)
+      // WARNING: The follow console will return ALL KEY DATA, including private keys and Uint8Arrays... TODO: REMOVE this console once debugging / review of keys is no longer necessary.
+      // console.log('call will be signed with', keypair)
 
-      // this expects old style zome calls from hc-web-client. Fix later.
+      console.log('hClient ACTION: Making call and signing with pub keypair.')
+
       const [instanceId, zome, funcName] = callString.split('/')
-      console.log(instanceId)
+      // console.log('making call following instance id:', instanceId)
       const call = {
         method: callString,
         params
