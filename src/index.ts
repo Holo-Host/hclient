@@ -9,7 +9,7 @@
  * - Setting up a websocket connection to the interceptor to sign commits on request
  * - Wrapping and unwrapping calls to and from the interceptor such that they look like regular holochain calls
  *
- * Using this library to make a Holochain web UI Holo compatible is very easy provide you are already using hc-web-client
+ * Using this library to make a Holochain web UI Holo compatible is very easy provided you are already using hc-web-client
  * to connect to holochain. In this case an app can be converted by adding the following lines to a page load function
  * ```javascript
  * let holochainclient = require('@holochain/hc-web-client') // this should already be part of your web UI
