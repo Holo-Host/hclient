@@ -12,7 +12,7 @@
     "prepare:integration_tests": "cd ./integration_tests && npm install",
     "integration_test": "cd ./integration_tests && npm run test",
     "unit_test": "npm run build:lib && mocha ./test/*.js -r chai/register-should",
-    "test": "npm run lint && npm run unit_test && npm run prepare:integration_tests && npm run integration_test",
+    "test": "npm run lint && npm run unit_test",
     "prepublishOnly": "npm test && npm run lint",
     "prepare": "npm run build && npm run build:lib",
     "preversion": "npm run lint",
