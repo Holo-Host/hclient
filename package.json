@@ -1,6 +1,6 @@
 {
   "name": "@holo-host/hclient",
-  "version": "0.2.8",
+  "version": "0.3.0",
   "description": "Client side lib injected by holo loader",
   "main": "./lib/index.js",
   "scripts": {
