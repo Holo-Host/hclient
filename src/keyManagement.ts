@@ -84,6 +84,7 @@ const registerSalt = (email: string, salt: Uint8Array) => {
  * @return     {Promise}  If successful will resolve to previously registered salt
  */
 const getRegisteredSalt = (email: string) => {
+  // Update this to POST again...
   // Check to see if email is already registered and return salt if successful (therefore make a GET call instead of POST...).
   return callSaltmine('GET', { email })
     .then(r => r.text())
