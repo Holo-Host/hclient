@@ -27,7 +27,7 @@ exports.randomBytes = randomBytes
 /**
  * using base64url encoding (https://tools.ietf.org/html/rfc4648#section-5)
  * Generate an identity string with a pair of public keys
- * @param {Buffer} signPub - singing public key
+ * @param {Buffer} signPub - signing public key
  * @param {Buffer} encPub - encryption public key
  * @return {string} - the base64url encoded identity (with checksum)
  */
@@ -101,10 +101,12 @@ export function pwHash (pass: Buffer, salt?: Buffer) {
       let derivedKey = _sodium.crypto_pwhash(
         opt.keyLength, pass, opt.salt,
         opt.opslimit, opt.memlimit, opt.algorithm)
+
       resolve({
         salt: opt.salt,
         hash: derivedKey
       })
+
       reject('failure reason')
     })
   })

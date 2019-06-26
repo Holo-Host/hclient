@@ -104,14 +104,15 @@ const hClient = (function () {
   const startLoginProcess = async (email: string, password: string, newRegistration: string) => {
     let kp
     if (newRegistration) {
-      console.log('registering new email with salt service')
+      console.log('Attempting to create new agent with email and salt service.')
       kp = await generateNewReadwriteKeypair(email, password)
     } else {
-      console.log('restoring keys from existing registration')
+      console.log('Attempting to log-in agent in by restoring keys. - An existing registration should exist, otherwise a new one is created.')
       kp = await regenerateReadwriteKeypair(email, password)
     }
     console.log('keypair is ', kp)
-    await setKeypair(kp)
+    // NB: sendClientSignature will emit the `holo/clientSignature`` call to enovy (thus triggering the signature into the conductor via the wormhole.)
+    await sendClientSignature(kp)
     await requestHosting()
     return true
   }
@@ -253,18 +254,21 @@ const hClient = (function () {
    *
    * @param      {Keypair}  kp      dpki-lite keypair object to attach to the instance
    */
-  const setKeypair = async (kp: Keypair) => {
+  const sendClientSignature = async (kp: Keypair) => {
     keypair = kp
-
     if (websocket) {
       const agentId = await getCurrentAgentId()
       await websocket.call('holo/identify', { agentId })
+
       // set up the websocket to sign on request
+      // NOTE: Envoy triggers this call upon identifying the current agent and their DNA instance;
+      // (ie once the correct chain to write to is located, THEN the signing sequence is triggred....)
       const event = `agent/${agentId}/sign`
       console.log('subscribing to event', event)
 
       websocket.subscribe(event)
       websocket.on(event, async ({ entry, id }: {entry: string, id: string}) => {
+        console.log("signing the following entry with private keypair: ", entry)
         const signature = await keypair.sign(entry)
         const signatureBase64 = await toBase64(signature)
         websocket.call('holo/clientSignature', {
@@ -352,7 +356,7 @@ const hClient = (function () {
 
     console.log('generating readonly keypair')
     const kp = await generateReadonlyKeypair()
-    await setKeypair(kp)
+    await sendClientSignature(kp)
 
     return ws
   }
