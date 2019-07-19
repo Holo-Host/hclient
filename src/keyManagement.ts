@@ -21,7 +21,8 @@ const callSaltmine = (method: string, params?: any): Promise<Response> => {
   let body
   if (method === 'GET' && !params) {
     body = undefined
-  } else if (method === 'GET' && params) {
+  }
+  else if (method === 'GET' && params) {
     body = undefined
     let email = params.email
     if (!email) {
@@ -38,6 +39,7 @@ const callSaltmine = (method: string, params?: any): Promise<Response> => {
       return encodeURIComponent(key) + '=' + encodeURIComponent(params[key])
     }).join('&')
   }
+  console.log('Calling saltmine with:', method, body );
   return fetch(saltmineUrl, {
     method: method,
     // mode: 'no-cors',
@@ -85,7 +87,7 @@ const registerSalt = (email: string, salt: Uint8Array) => {
  */
 const getRegisteredSalt = (email: string) => {
   // Check to see if email is already registered and return salt if successful (therefore make a GET call instead of POST...).
-  return callSaltmine('GET', { email })
+  return callSaltmine('POST', { email })
     .then(r => r.text())
     .then(fromBase64)
       // @ts-ignore
@@ -187,6 +189,7 @@ const regenerateReadwriteKeypair = async (
   password: string,
   getRegisteredSaltCallback = getRegisteredSalt
 ) => {
+  console.log("Regenerate read/write keypair:", email, password );
   try {
     const registeredSalt = await getRegisteredSaltCallback(email)
 

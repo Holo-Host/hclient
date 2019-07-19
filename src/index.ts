@@ -328,7 +328,7 @@ const hClient = (function () {
 
     // Check response for authentication error to see if login is required
     try {
-      const responseJson = JSON.parse(response)
+      const responseJson = response //JSON.parse(response)
       if (responseJson.Err && responseJson.Err.code === 401) {
         triggerLoginPrompt()
       }
