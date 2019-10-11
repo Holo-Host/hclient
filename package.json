@@ -1,22 +1,15 @@
 {
-  "name": "@holo-host/hclient",
-  "version": "0.2.8",
-  "description": "Client side lib injected by holo loader",
-  "main": "./lib/index.js",
+  "name": "@holo-host/web-sdk",
+  "version": "0.1.0",
+  "description": "Client-side SDK for Holo Hosting hApp developer",
+  "main": "./dist/index.js",
   "scripts": {
-    "clean": "rm -f ./dist/*",
-    "build": "parcel build ./src/index.ts --global hClient -o ./dist/hclient-$npm_package_version.browser.min.js",
-    "build:lib": "mkdir -p ./lib && tsc",
-    "doc": "typedoc --out ./docs/ ./src/",
     "lint": "tslint -p ./tslint.json",
-    "prepare:integration_tests": "cd ./integration_tests && npm install",
-    "integration_test": "cd ./integration_tests && npm run test",
     "unit_test": "npm run build:lib && mocha ./test/*.js -r chai/register-should",
     "test": "npm run lint && npm run unit_test",
     "prepublishOnly": "npm test && npm run lint",
     "prepare": "npm run build && npm run build:lib",
     "preversion": "npm run lint",
-    "version": "git add .",
     "postversion": "git push && git push --tags"
   },
   "files": [
@@ -25,30 +18,13 @@
   "author": "",
   "license": "GPL-3",
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.3.4",
-    "@babel/plugin-transform-runtime": "^7.3.4",
-    "@types/node": "^11.13.2",
-    "babel-plugin-static-fs": "^1.2.0",
-    "chai": "^4.2.0",
-    "cssnano": "^4.1.10",
-    "docdash": "^1.0.3",
-    "fetch-mock": "^7.3.1",
-    "mocha": "^6.0.2",
-    "node-fetch": "^2.3.0",
-    "parcel": "^1.11.0",
-    "parcel-plugin-inliner": "^1.0.4",
-    "stylus": "^0.54.5",
-    "tslint": "^5.15.0",
-    "tslint-config-standard": "^8.0.1",
-    "typedoc": "^0.14.2",
-    "typescript": "^3.4.2"
+    "@types/node": "^12.7.12",
+    "braintree-jsdoc-template": "^3.3.0",
+    "chokidar-cli": "^2.0.0",
+    "jsdoc": "^3.6.3",
+    "typescript": "^3.6.4",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9"
   },
-  "dependencies": {
-    "@holochain/hcid-js": "0.0.6",
-    "dialog-polyfill": "^0.4.10",
-    "jquery": "^3.4.0",
-    "libsodium-wrappers-sumo": "^0.7.4",
-    "msgpack-lite": "^0.1.26"
-  }
+  "dependencies": {}
 }
