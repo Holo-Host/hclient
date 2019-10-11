@@ -108,6 +108,20 @@ class hApp {
     }
 
     /**
+     * Delete Agent keys and any session data
+     * 
+     * @async
+     * 
+     * @return {boolean} Success indicator
+     * 
+     * @example
+     * await happ.signOut();
+     */
+    public async signOut () : Promise<boolean> {
+	return false;
+    }
+
+    /**
      * Launch Holo sign in prompt
      * 
      * @param {string} alias		- DNA alias (by convention)
