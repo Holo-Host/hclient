@@ -1,5 +1,11 @@
 {
     "plugins": ["plugins/markdown"],
+    "templates": {
+	"referenceTitle": "Holo Hosting - Web SDK",
+	"disableSort": false,
+	"resources": {
+	}
+    },
     "opts": {
 	"template": "node_modules/braintree-jsdoc-template"
     }
