@@ -22,3 +22,15 @@ watch-docs:
 
 clean-docs:
 	git clean -df ./docs
+
+CURRENT_BRANCH = $(shell git branch | grep \* | cut -d ' ' -f2)
+publish-docs:
+	git branch -D gh-pages
+	git checkout -b gh-pages
+	make docs
+	ln -s docs v$$( cat package.json | jq -r .version )
+	git add -f docs
+	git add v$$( cat package.json | jq -r .version )
+	git commit -m "JSdocs v$$( cat package.json | jq -r .version )"
+	git push -f origin gh-pages
+	git checkout $(CURRENT_BRANCH)

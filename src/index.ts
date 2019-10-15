@@ -39,7 +39,7 @@ const define_readonly = function ( obj, key, value ) {
  * <script type="text/javascript" src="./holo-web-sdk.js"></script>
  * <script type="text/javascript">
  * (async () => {
- *     const happ = await HoloWebSDK.init( HoloWebSDK.DEVELOP );
+ *     const happ = await HoloWebSDK.init( HoloWebSDK.DEVELOP, "QmUgZ8e6xE1h9fH89CNqAXFQkkKyRh2Ag6jgTNC8wcoNYS" );
  * 
  *     const holofuel = await happ.dna( "holofuel", {
  *         "transactions": ["ledger_state"],

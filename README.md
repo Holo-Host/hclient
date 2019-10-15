@@ -16,8 +16,8 @@ infrastructure.
 
 ## API Reference ![][ok-doc]
 
-- [GH Pages - Documentation](https://holo-host.github.io/hClient.js/v1.0.0/module-holo-host_web-sdk.html)
-- [Documentation (relative link)](./v1.0.0/module-holo-host_web-sdk.html)
+- [GH Pages - Documentation](https://holo-host.github.io/hClient.js/docs/module-holo-host_web-sdk.html)
+- [Documentation (relative link)](./docs/module-holo-host_web-sdk.html)
 
 ## Testing
 
