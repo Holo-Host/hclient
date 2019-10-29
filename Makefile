@@ -1,5 +1,5 @@
 
-NAME			= holo_hosting_web_sdk.js
+NAME			= holo_hosting_web_sdk
 
 build/index.js:		src/index.ts
 	npx tsc --esModuleInterop --lib es2015,dom --outDir ./build ./src/index.ts
@@ -25,7 +25,7 @@ clean-docs:
 
 CURRENT_BRANCH = $(shell git branch | grep \* | cut -d ' ' -f2)
 publish-docs:
-	git branch -D gh-pages
+	git branch -D gh-pages || true
 	git checkout -b gh-pages
 	make docs
 	ln -s docs v$$( cat package.json | jq -r .version )
