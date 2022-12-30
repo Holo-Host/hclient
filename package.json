@@ -34,7 +34,7 @@
     "cssnano": "^4.1.10",
     "docdash": "^1.0.3",
     "fetch-mock": "^7.3.1",
-    "mocha": "^6.0.2",
+    "mocha": "^10.2.0",
     "node-fetch": "^2.3.0",
     "parcel": "^1.11.0",
     "parcel-plugin-inliner": "^1.0.4",
